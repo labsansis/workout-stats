@@ -4,6 +4,8 @@
   "description": "Example of a Python Flask API service backed by DynamoDB with traditional Serverless Framework",
   "author": "",
   "devDependencies": {
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-offline": "^12.0.4",
     "serverless-python-requirements": "^6.0.0",
     "serverless-wsgi": "^3.0.1"
   }

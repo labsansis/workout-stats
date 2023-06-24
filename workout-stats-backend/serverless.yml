@@ -8,6 +8,12 @@ custom:
   tableName: 'users-table-${sls:stage}'
   wsgi:
     app: app.app
+  # If I understand this correctly this is whitelisting a "dev" env for a local dynamo instance
+  dynamodb:
+    start:
+      migrate: true
+    stages:
+      - dev
 
 provider:
   name: aws
@@ -37,7 +43,8 @@ functions:
 plugins:
   - serverless-wsgi
   - serverless-python-requirements
-
+  - serverless-dynamodb-local
+  - serverless-offline
 resources:
   Resources:
     UsersTable:
