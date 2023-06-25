@@ -28,6 +28,7 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
     w.name = a.activityName;
     w.startTime = new Date(a.beginTimestamp);
     w.duration = a.duration;
+    w.workoutType = a.activityType.typeKey;
     if (a.fullExerciseSets) {
       w.exerciseSets = a.fullExerciseSets
         .filter((ges) => ges.setType === "ACTIVE")
@@ -40,7 +41,8 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
             ges.exercises[0].name
           );
           es.repetitionCount = ges.repetitionCount;
-          es.weight = ges.weight || 0;
+          //   Garmin seems to store it in grams
+          es.weight = (ges.weight || 0) / 1000;
           // For now just default to kg.
           es.weightUnit = WeightUnit.KG;
           es.startTime = new Date(Date.parse(ges.startTime));

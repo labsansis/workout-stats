@@ -1,14 +1,19 @@
+import { useState } from "react";
 import { Workout } from "../../models/workout";
 import SideMenu from "../SideMenu/SideMenu";
 import { WorkoutSummary } from "../WorkoutSummary/WorkoutSummary";
 import "./Dashboard.css";
+import { StrengthWorkoutList } from "../StrengthWorkoutList/StrengthWorkoutList";
 
 export function Dashboard({ workouts }: DashboardProps) {
+  const [page, setPage] = useState("all");
+
   return (
     <div id="dashboard-container">
-      <SideMenu />
+      <SideMenu switchPage={setPage} />
       <div id="dashboard-content">
-        <WorkoutSummary workouts={workouts} />
+        {page === "all" && <WorkoutSummary workouts={workouts} />}
+        {page === "strength" && <StrengthWorkoutList workouts={workouts} />}
       </div>
     </div>
   );

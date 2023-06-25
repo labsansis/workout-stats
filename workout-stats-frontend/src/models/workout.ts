@@ -5,14 +5,14 @@ export class Exercise {
 }
 
 export enum WeightUnit {
-  KG,
-  LBS,
+  KG = "kg",
+  LBS = "lbs",
 }
 
 export class ExerciseSet {
   exercise: Exercise;
   repetitionCount: number;
-  weight: number;
+  weight?: number;
   weightUnit: WeightUnit;
   startTime: Date;
   duration: number;
@@ -23,5 +23,6 @@ export class Workout {
   name: string;
   startTime: Date;
   duration: number;
+  workoutType: string;
   exerciseSets?: ExerciseSet[];
 }
