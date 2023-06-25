@@ -18,7 +18,7 @@ const SideMenu = ({ switchPage }: SideMenuProps) => {
   return (
     <div className={`side-menu ${isOpen ? "open" : ""}`}>
       <button className="toggle-button" onClick={toggleMenu}>
-        {isOpen ? "Close" : "Open"}
+        {isOpen ? "Close" : "Menu"}
       </button>
       <div className="menu-content">
         <a href="#" onClick={handleClick("all")}>

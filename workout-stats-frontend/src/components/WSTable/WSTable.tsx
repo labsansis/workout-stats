@@ -33,7 +33,7 @@ export function WSTable(props: WSTableProps) {
             className="border-b dark:border-neutral-500 odd:bg-slate-50"
           >
             {d.map((c, j) => (
-              <Td key={j} className="whitespace-nowrap px-6 py-4">
+              <Td key={j} className="px-6 py-4">
                 {c}
               </Td>
             ))}
