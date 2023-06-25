@@ -1,0 +1,53 @@
+.side-menu {
+    position: fixed;
+    width: 300px;
+    height: 100vh;
+    background-color: #f1f1f1;
+    transition: left 0.3s ease-in-out;
+    z-index: 100;
+  }
+    
+  .toggle-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: none;
+  }
+  
+  .menu-content {
+    padding: 20px;
+  }
+  
+
+
+  .menu-content a {
+    display: block;
+    padding: 10px 0;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .menu-content a:hover {
+    color: #007bff;
+  }
+
+  /* Media Query for small screens */
+@media (max-width: 767px) {
+    .side-menu {
+      left: -300px;
+      padding-top: 40px;
+    }
+
+    .side-menu.open {
+        left: 0; /* Slide the menu into view when open */
+      }
+      .toggle-button {
+        display: block;
+      }
+}

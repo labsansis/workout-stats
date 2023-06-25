@@ -1,0 +1,12 @@
+#dashboard-content {
+    padding-left: 10px;
+    padding-top: 50px;
+}
+
+  /* Media Query for small screens */
+  @media (min-width: 767px) {
+    #dashboard-content {
+      padding-left: 320px;
+      padding-top: 30px;
+    }
+  }

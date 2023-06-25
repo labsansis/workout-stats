@@ -2,7 +2,8 @@ import { useState } from 'react';
 import './App.css';
 import { Workout } from "./models/workout";
 import { WorkoutUpload } from './components/WorkoutUpload/WorkoutUpload';
-import { FileUpload } from './components/FileUpload/FileUpload';
+import SideMenu from './components/SideMenu/SideMenu';
+import { Dashboard } from './components/Dashboard/Dashboard';
 
 function App() {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -13,8 +14,7 @@ function App() {
 
   
 return <>
-    <div>Files uploaded!</div>
-    <div>{JSON.stringify(workouts)}</div>
+    <Dashboard workouts={workouts}/>
   </>;
 }
 

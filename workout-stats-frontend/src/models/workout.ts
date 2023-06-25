@@ -22,5 +22,5 @@ export class Workout {
     name: string;
     startTime: Date;
     duration: number;
-    exerciseSets: ExerciseSet[];
+    exerciseSets?: ExerciseSet[];
 }
