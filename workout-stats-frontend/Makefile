@@ -1,2 +1,2 @@
-copy-proto:
-	cp -r ../proto_schemas ./src/
+format:
+	npx prettier -w .
