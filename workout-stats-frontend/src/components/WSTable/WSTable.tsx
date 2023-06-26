@@ -46,7 +46,7 @@ export function WSTable(props: WSTableProps) {
 
 type WSTableProps = {
   headers: (number | string)[];
-  data: (number | string | boolean)[][];
+  data: (number | string | boolean | React.JSX.Element)[][];
   fixed?: boolean;
   lightHeader?: boolean;
 };

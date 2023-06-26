@@ -27,6 +27,9 @@ const SideMenu = ({ switchPage }: SideMenuProps) => {
         <a href="#" onClick={handleClick("strength")}>
           Strength Workouts
         </a>
+        <a href="#" onClick={handleClick("exercises")}>
+          Exercises
+        </a>
       </div>
     </div>
   );
