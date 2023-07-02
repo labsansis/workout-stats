@@ -53,6 +53,16 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
     return w;
   };
 
+  const deduplicateWorkouts = (workouts: Workout[]): Workout[] => {
+    const seenIds = new Set<string>();
+    const result = [];
+    for (let w of workouts) {
+      if (!seenIds.has(w.sourceWorkoutId)) result.push(w);
+      seenIds.add(w.sourceWorkoutId);
+    }
+    return result;
+  };
+
   const fileHandler = (
     workoutFiles: FileList | null,
     errorHandler: (err: string) => void
@@ -89,6 +99,7 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
       .then((workoutDataSets) => {
         return workoutDataSets.flatMap((wds) => wds.map(parseGarminActivity));
       })
+      .then(deduplicateWorkouts)
       .then((parsedWorkouts) => {
         console.log(`Got ${parsedWorkouts.length} parsed workouts`);
         props.setWorkouts(parsedWorkouts);
