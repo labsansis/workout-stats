@@ -13,8 +13,13 @@ import { FileUpload } from "../FileUpload/FileUpload";
  * Currently only files coming from the Garmin Workout Downloader browser extension are supported.
  */
 export function WorkoutUpload(props: WorkoutUploadProps) {
-  const prettifyGarminExerciseName = (name: string | null): string => {
-    if (!name) return "Unknown";
+  const prettifyGarminExerciseName = (
+    name: string | null,
+    category: string | undefined
+  ): string => {
+    if (!name && !category) return "Unknown";
+    if (!name) name = category as string;
+
     return name
       .split("_")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -37,7 +42,8 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
           es.exercise.category = ges.exercises[0].category;
           es.exercise.name = ges.exercises[0].name;
           es.exercise.displayName = prettifyGarminExerciseName(
-            ges.exercises[0].name
+            ges.exercises[0].name,
+            ges.exercises[0].category
           );
           es.repetitionCount = ges.repetitionCount;
           //   Garmin seems to store it in grams
