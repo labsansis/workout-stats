@@ -2,7 +2,6 @@ import { useState } from "react";
 import "./App.css";
 import { Workout } from "./models/workout";
 import { WorkoutUpload } from "./components/WorkoutUpload/WorkoutUpload";
-import SideMenu from "./components/SideMenu/SideMenu";
 import { Dashboard } from "./components/Dashboard/Dashboard";
 
 function App() {

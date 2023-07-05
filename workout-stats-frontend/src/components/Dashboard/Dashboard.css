@@ -1,7 +1,12 @@
+#dashboard-container {
+  min-height: 100%;
+}
+
 #dashboard-content {
   padding-left: 10px;
   padding-top: 50px;
   padding-bottom: 200px;
+  min-height: 100%;
 }
 
 /* Media Query for small screens */
