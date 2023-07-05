@@ -1,0 +1,387 @@
+[
+  {
+    "sourceWorkoutId": "1",
+    "name": "Strength",
+    "secondsInPast": 3600,
+    "duration": 3500,
+    "workoutType": "strength_training",
+    "exerciseSets": [
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 3600,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 60,
+        "weightUnit": "kg",
+        "secondsInPast": 3500,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 80,
+        "weightUnit": "kg",
+        "secondsInPast": 3400,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 100,
+        "weightUnit": "kg",
+        "secondsInPast": 3300,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 100,
+        "weightUnit": "kg",
+        "secondsInPast": 3200,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 3100,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 60,
+        "weightUnit": "kg",
+        "secondsInPast": 3000,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 80,
+        "weightUnit": "kg",
+        "secondsInPast": 2900,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 100,
+        "weightUnit": "kg",
+        "secondsInPast": 2800,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 110,
+        "weightUnit": "kg",
+        "secondsInPast": 2700,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 10,
+        "weightUnit": "kg",
+        "secondsInPast": 2600,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 15,
+        "weightUnit": "kg",
+        "secondsInPast": 2500,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 2400,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 2300,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 2200,
+        "duration": 20
+      }
+    ]
+  },
+  {
+    "sourceWorkoutId": "2",
+    "name": "Strength",
+    "secondsInPast": 172800,
+    "duration": 3400,
+    "workoutType": "strength_training",
+    "exerciseSets": [
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 172800,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 60,
+        "weightUnit": "kg",
+        "secondsInPast": 172700,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 80,
+        "weightUnit": "kg",
+        "secondsInPast": 172600,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 100,
+        "weightUnit": "kg",
+        "secondsInPast": 172500,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BACK_SQUAT",
+          "category": "SQUAT",
+          "displayName": "Barbell Back Squat"
+        },
+        "repetitionCount": 5,
+        "weight": 120,
+        "weightUnit": "kg",
+        "secondsInPast": 172400,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 172300,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 60,
+        "weightUnit": "kg",
+        "secondsInPast": 172200,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 80,
+        "weightUnit": "kg",
+        "secondsInPast": 172100,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 90,
+        "weightUnit": "kg",
+        "secondsInPast": 172000,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "BARBELL_BENCH_PRESS",
+          "category": "BENCH_PRESS",
+          "displayName": "Barbell Bench Press"
+        },
+        "repetitionCount": 5,
+        "weight": 90,
+        "weightUnit": "kg",
+        "secondsInPast": 171900,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 10,
+        "weightUnit": "kg",
+        "secondsInPast": 171800,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 15,
+        "weightUnit": "kg",
+        "secondsInPast": 171700,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 171600,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 171500,
+        "duration": 20
+      },
+      {
+        "exercise": {
+          "name": "OVERHEAD_DUMBBELL_PRESS",
+          "category": "OVERHEAD_PRESS",
+          "displayName": "Overhead Dumbbell Press"
+        },
+        "repetitionCount": 5,
+        "weight": 20,
+        "weightUnit": "kg",
+        "secondsInPast": 171400,
+        "duration": 20
+      }
+    ]
+  },
+  {
+    "sourceWorkoutId": "3",
+    "name": "Walking",
+    "secondsInPast": 259200,
+    "duration": 3400,
+    "workoutType": "walking"
+  }
+]

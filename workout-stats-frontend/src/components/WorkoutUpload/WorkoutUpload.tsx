@@ -69,7 +69,7 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
   };
 
   const fileHandler = (
-    workoutFiles: FileList | null,
+    workoutFiles: FileList | null | File[],
     errorHandler: (err: string) => void
   ) => {
     console.log("fileHandler callback");
