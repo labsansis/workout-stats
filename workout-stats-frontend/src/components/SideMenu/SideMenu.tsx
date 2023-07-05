@@ -21,8 +21,8 @@ const SideMenu = ({ switchPage }: SideMenuProps) => {
         {isOpen ? "Close" : "Menu"}
       </button>
       <div className="menu-content">
-        <a href="#" onClick={handleClick("all")}>
-          All Workouts
+        <a href="#" onClick={handleClick("home")}>
+          Home
         </a>
         <a href="#" onClick={handleClick("strength")}>
           Strength Workouts

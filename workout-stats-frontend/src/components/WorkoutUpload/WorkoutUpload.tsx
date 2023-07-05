@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { GarminActivity } from "../../models/garmin";
 import {
   Exercise,
