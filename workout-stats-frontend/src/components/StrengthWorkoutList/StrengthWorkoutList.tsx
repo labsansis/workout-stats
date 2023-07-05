@@ -27,6 +27,7 @@ export function StrengthWorkoutList({ workouts }: StrengthWorkoutListProps) {
           {formatDuration(w.duration)}
         </div>
         <WSTable
+          key={`stregnth-list-table-full-${w.sourceWorkoutId}`}
           headers={["Exercise", "Weight", "Reps", "Time"]}
           data={(w.exerciseSets || []).map((es) => [
             es.exercise.displayName,
@@ -74,6 +75,7 @@ export function StrengthWorkoutList({ workouts }: StrengthWorkoutListProps) {
             {formatDuration(w.duration)}
           </div>
           <WSTable
+            key={`stregnth-list-table-condensed-${w.sourceWorkoutId}`}
             headers={["Exercise", "Max Weight", "Sets", "Total Reps"]}
             data={condensedArr.map((ced) => [
               ced.exerciseName,
