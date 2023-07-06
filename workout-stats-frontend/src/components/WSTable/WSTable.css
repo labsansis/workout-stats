@@ -1,0 +1,5 @@
+/* override react-super-responsive-table */
+.responsiveTable td .tdBefore {
+  font-weight: 400;
+  text-shadow: 1px 1px #c2c2c2;
+}

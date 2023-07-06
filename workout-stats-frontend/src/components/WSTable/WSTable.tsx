@@ -1,5 +1,6 @@
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import "./WSTable.css";
 
 /**
  * This is a UX component styling a table.
@@ -33,7 +34,7 @@ export function WSTable(props: WSTableProps) {
             className="border-b dark:border-neutral-500 odd:bg-slate-50"
           >
             {d.map((c, j) => (
-              <Td key={j} className="px-6 py-4">
+              <Td key={j} className="sm:px-6 sm:py-2">
                 {c}
               </Td>
             ))}
