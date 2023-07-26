@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
 import { Workout } from "../../models/workout";
 import { CardGrid } from "../cards/CardGrid";
 import dateFormat from "dateformat";
 import { WSTable } from "../WSTable/WSTable";
 import { formatDuration } from "../../common/functions";
+import { useRecoilValue } from "recoil";
+import {
+  strengthWorkoutsState,
+  workoutsState,
+} from "../../common/recoilStateDefs";
 
-export function Home({ workouts }: HomeProps) {
-  const [strengthWorkouts, setStrengthWorkouts] = useState<Workout[]>([]);
+export function Home() {
+  const strengthWorkouts = useRecoilValue<Workout[]>(strengthWorkoutsState);
+  const workouts = useRecoilValue<Workout[]>(workoutsState);
 
   const MILLISECONDS_IN_WEEK = 1000 * 3600 * 24 * 7;
-
-  useEffect(() => {
-    setStrengthWorkouts(
-      workouts.filter((w) => w.workoutType === "strength_training")
-    );
-  }, [workouts]);
 
   const numWorkoutsPerWeek = (): number => {
     const minTs = Math.min(
@@ -69,7 +68,7 @@ export function Home({ workouts }: HomeProps) {
       <h1 className="pt-7">All activities</h1>
       <WSTable
         headers={["Date", "Workout Name", "Length", "# Sets"]}
-        data={workouts.map((w) => [
+        data={byTimeDescending().map((w) => [
           dateFormat(w.startTime, "ddd dd mmm yyyy"),
           w.name,
           formatDuration(w.duration),
@@ -79,7 +78,3 @@ export function Home({ workouts }: HomeProps) {
     </>
   );
 }
-
-type HomeProps = {
-  workouts: Workout[];
-};

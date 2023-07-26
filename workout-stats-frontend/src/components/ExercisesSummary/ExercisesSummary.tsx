@@ -3,10 +3,13 @@ import { ExerciseSet, Workout } from "../../models/workout";
 import { WSTable } from "../WSTable/WSTable";
 import dateFormat from "dateformat";
 import Chart, { Props as ApexChartProps } from "react-apexcharts";
+import { useRecoilValue } from "recoil";
+import { strengthWorkoutsState } from "../../common/recoilStateDefs";
 
-export function ExercisesSummary({ workouts }: ExercisesSummaryProps) {
+export function ExercisesSummary() {
   const [exerciseToPlot, setExerciseToPlot] = useState("");
   const plotRef = useRef<HTMLDivElement>(null);
+  const workouts = useRecoilValue(strengthWorkoutsState);
 
   const handlePlotButtonClick = (key: string) => {
     setExerciseToPlot(key);
@@ -123,7 +126,3 @@ export function ExercisesSummary({ workouts }: ExercisesSummaryProps) {
     </>
   );
 }
-
-type ExercisesSummaryProps = {
-  workouts: Workout[];
-};

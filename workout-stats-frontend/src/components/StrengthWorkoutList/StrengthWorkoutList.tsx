@@ -5,10 +5,12 @@ import { formatDuration } from "../../common/functions";
 import Toggle from "../Toggle/Toggle";
 import { useState } from "react";
 import "./StrengthWorkoutList.css";
+import { useRecoilValue } from "recoil";
+import { strengthWorkoutsState } from "../../common/recoilStateDefs";
 
-export function StrengthWorkoutList({ workouts }: StrengthWorkoutListProps) {
+export function StrengthWorkoutList() {
   const [condensed, setCondensed] = useState(true);
-  workouts = [...workouts.filter((w) => w.workoutType === "strength_training")];
+  const workouts = [...useRecoilValue(strengthWorkoutsState)];
   // sort in reverse order by date
   workouts.sort((w1, w2) =>
     w1.startTime > w2.startTime ? -1 : w1.startTime < w2.startTime ? 1 : 0
@@ -105,10 +107,6 @@ export function StrengthWorkoutList({ workouts }: StrengthWorkoutListProps) {
     </>
   );
 }
-
-type StrengthWorkoutListProps = {
-  workouts: Workout[];
-};
 
 type CondensedExerciseData = {
   exerciseName: string;
