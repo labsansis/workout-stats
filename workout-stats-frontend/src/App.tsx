@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import { WeightUnit, Workout } from "./models/workout";
 import { WorkoutUpload } from "./components/WorkoutUpload/WorkoutUpload";
-import { Dashboard } from "./components/Dashboard/Dashboard";
 import demoDataJson from "./demoData.json";
 import { useRecoilState } from "recoil";
 import { workoutsState } from "./common/recoilStateDefs";
