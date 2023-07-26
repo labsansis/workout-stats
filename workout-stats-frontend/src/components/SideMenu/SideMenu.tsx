@@ -1,18 +1,12 @@
 import React, { MouseEventHandler, useState } from "react";
 import "./SideMenu.css"; // CSS styles for the SideMenu component
+import { Link } from "react-router-dom";
 
-const SideMenu = ({ switchPage }: SideMenuProps) => {
+const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-  };
-
-  const handleClick = (pageId: string) => {
-    return (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-      e.preventDefault();
-      switchPage(pageId);
-    };
   };
 
   return (
@@ -21,22 +15,12 @@ const SideMenu = ({ switchPage }: SideMenuProps) => {
         {isOpen ? "Close" : "Menu"}
       </button>
       <div className="menu-content">
-        <a href="#" onClick={handleClick("home")}>
-          Home
-        </a>
-        <a href="#" onClick={handleClick("strength")}>
-          Strength Workouts
-        </a>
-        <a href="#" onClick={handleClick("exercises")}>
-          Exercises
-        </a>
+        <Link to="/home">Home</Link>
+        <Link to="/strength">Strength Workouts</Link>
+        <Link to="/exercises">Exercises</Link>
       </div>
     </div>
   );
-};
-
-type SideMenuProps = {
-  switchPage: (pageId: string) => void;
 };
 
 export default SideMenu;

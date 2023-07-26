@@ -6,21 +6,19 @@ import { StrengthWorkoutList } from "../StrengthWorkoutList/StrengthWorkoutList"
 import { ExercisesSummary } from "../ExercisesSummary/ExercisesSummary";
 import { Home } from "../Home/Home";
 
-export function Dashboard({ workouts }: DashboardProps) {
-  const [page, setPage] = useState("home");
-
+export function Dashboard({ page }: DashboardProps) {
   return (
     <div id="dashboard-container">
-      <SideMenu switchPage={setPage} />
+      <SideMenu />
       <div id="dashboard-content">
-        {page === "home" && <Home workouts={workouts} />}
-        {page === "strength" && <StrengthWorkoutList workouts={workouts} />}
-        {page === "exercises" && <ExercisesSummary workouts={workouts} />}
+        {page === "home" && <Home />}
+        {page === "strength" && <StrengthWorkoutList />}
+        {page === "exercises" && <ExercisesSummary />}
       </div>
     </div>
   );
 }
 
 type DashboardProps = {
-  workouts: Workout[];
+  page: string;
 };
