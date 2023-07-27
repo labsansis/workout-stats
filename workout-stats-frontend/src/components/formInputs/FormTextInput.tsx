@@ -34,7 +34,7 @@ const FormTextInput = ({ label, errorOverride, ...props }: TextInputProps) => {
         {...props}
       />
       <div className="text-sm text-[#b91c1c] min-h-[2em] px-[0.5em]">
-        {errorText && <div className="error">{errorText}</div>}
+        {errorText && <div>{errorText}</div>}
       </div>
     </div>
   );

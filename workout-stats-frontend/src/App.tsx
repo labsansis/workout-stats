@@ -51,7 +51,7 @@ function App() {
 
         <Link
           to="/signup"
-          className="text-xl p-4 bold text-white bg-[#155e75] m-4"
+          className="text-xl p-4 bold text-white bg-[#0891b2] m-4"
         >
           Sign Up
         </Link>

@@ -55,10 +55,6 @@ export default function SignUp() {
     return "There was an error signing up. Please try again or contact us.";
   };
 
-  const checkCurrentAuth = () => {
-    console.log(firebaseAuth.currentUser);
-  };
-
   return (
     <div className="mx-auto md:w-[30em] px-4 py-10">
       <h1>Sign Up</h1>
@@ -84,6 +80,7 @@ export default function SignUp() {
           handleSignup(values, setSubmitting)
         }
       >
+        {formik => (
         <Form>
           <FormTextInput label="Name" name="name" type="text" />
 
@@ -101,12 +98,13 @@ export default function SignUp() {
 
           <button
             type="submit"
-            className="py-2 bg-[#0891b2] block w-full rounded"
+            className="py-2 bg-[#0891b2] block w-full rounded text-[#f1f5f9] disabled:bg-[#88aab3]"
+            disabled={formik.isSubmitting}
           >
             Submit
           </button>
-          {!!serverErrorCode && <div>Error signing up: {serverErrorCode}</div>}
-        </Form>
+          {!!serverErrorCode && <div className="text-sm text-[#b91c1c] mt-3">{formatServerError()}</div>}
+        </Form>)}
       </Formik>
     </div>
   );
