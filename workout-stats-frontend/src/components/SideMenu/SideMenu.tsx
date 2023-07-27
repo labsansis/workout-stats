@@ -1,12 +1,19 @@
-import React, { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import "./SideMenu.css"; // CSS styles for the SideMenu component
 import { Link } from "react-router-dom";
+import { userState } from "../../common/recoilStateDefs";
+import { useRecoilValue } from "recoil";
 
 const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useRecoilValue(userState);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const getUserDisplayName = () => {
+    return user?.name || user?.email;
   };
 
   return (
@@ -18,6 +25,11 @@ const SideMenu = () => {
         <Link to="/home">Home</Link>
         <Link to="/strength">Strength Workouts</Link>
         <Link to="/exercises">Exercises</Link>
+        <div className="menu-user-line bg-[#d1fae5]">
+          {getUserDisplayName()}
+        </div>
+        <Link to="/upload">Upload files</Link>
+        <Link to="/signout">Sign out</Link>
       </div>
     </div>
   );

@@ -49,3 +49,8 @@
     display: block;
   }
 }
+
+.menu-user-line {
+  margin: 0 -20px;
+  padding: 10px 20px;
+}
