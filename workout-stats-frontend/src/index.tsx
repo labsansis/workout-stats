@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard/Dashboard";
 import { RecoilRoot } from "recoil";
+import SignUp from "./components/userAuth/SignUp";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "exercises",
     element: <Dashboard page="exercises" />,
+  },
+  {
+    path: "signup",
+    element: <SignUp />,
   },
 ]);
 
