@@ -1,3 +1,4 @@
+import { db } from "../../firebase";
 import { GarminActivity } from "../../models/garmin";
 import {
   Exercise,
@@ -6,6 +7,9 @@ import {
   Workout,
 } from "../../models/workout";
 import { FileUpload } from "../FileUpload/FileUpload";
+import { writeBatch, doc } from "firebase/firestore";
+import { userState } from "../../common/recoilStateDefs";
+import { useRecoilValue } from "recoil";
 
 /**
  * A component to upload one or more workout files, parse them and return structured workouts.
@@ -13,63 +17,37 @@ import { FileUpload } from "../FileUpload/FileUpload";
  * Currently only files coming from the Garmin Workout Downloader browser extension are supported.
  */
 export function WorkoutUpload(props: WorkoutUploadProps) {
-  const prettifyGarminExerciseName = (
-    name: string | null,
-    category: string | undefined
-  ): string => {
-    if (!name && !category) return "Unknown";
-    if (!name) name = category as string;
+  const user = useRecoilValue(userState);
 
-    return name
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-  };
-
-  const parseGarminActivity = (a: GarminActivity): Workout => {
-    const w = new Workout();
-    w.sourceWorkoutId = String(a.activityId);
-    w.name = a.activityName;
-    w.startTime = new Date(a.beginTimestamp);
-    w.duration = a.duration;
-    w.workoutType = a.activityType.typeKey;
-    if (a.fullExerciseSets) {
-      w.exerciseSets = a.fullExerciseSets
-        .filter((ges) => ges.setType === "ACTIVE")
-        .map((ges) => {
-          const es = new ExerciseSet();
-          es.exercise = new Exercise();
-          es.exercise.category = ges.exercises[0].category;
-          es.exercise.name = ges.exercises[0].name;
-          es.exercise.displayName = prettifyGarminExerciseName(
-            ges.exercises[0].name,
-            ges.exercises[0].category
-          );
-          es.repetitionCount = ges.repetitionCount;
-          //   Garmin seems to store it in grams
-          es.weight = (ges.weight || 0) / 1000;
-          // For now just default to kg.
-          es.weightUnit = WeightUnit.KG;
-          es.startTime = new Date(Date.parse(ges.startTime));
-          es.duration = ges.duration;
-          return es;
-        });
+  /**
+   * Uploads the raw Garmin workouts to the Cloud Firestore db.
+   *
+   * @param activities The activities fetched from Garmin Connect using the Garmin Workout
+   *                   Downloader extension. Note that the actual data object contains more
+   *                   fields than the GarminActivity type enumerates.
+   * @returns An empty promise (story of my life).
+   */
+  const uploadToDb = (activities: GarminActivity[]): Promise<void> => {
+    const batch = writeBatch(db);
+    for (let activity of activities) {
+      const processedActivityId = `garmin_${activity.activityId}`;
+      batch.set(
+        doc(
+          db,
+          "users",
+          user?.id as string,
+          "rawWorkouts",
+          processedActivityId
+        ),
+        activity
+      );
     }
-    return w;
-  };
-
-  const deduplicateWorkouts = (workouts: Workout[]): Workout[] => {
-    const seenIds = new Set<string>();
-    const result = [];
-    for (let w of workouts) {
-      if (!seenIds.has(w.sourceWorkoutId)) result.push(w);
-      seenIds.add(w.sourceWorkoutId);
-    }
-    return result;
+    return batch.commit();
   };
 
   const fileHandler = (
     workoutFiles: FileList | null | File[],
+    successHandler: () => void,
     errorHandler: (err: string) => void
   ) => {
     console.log("fileHandler callback");
@@ -102,20 +80,27 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
     );
     Promise.all(promises)
       .then((workoutDataSets) => {
-        return workoutDataSets.flatMap((wds) => wds.map(parseGarminActivity));
+        return workoutDataSets.flatMap((wds) => wds);
       })
-      .then(deduplicateWorkouts)
-      .then((parsedWorkouts) => {
-        console.log(`Got ${parsedWorkouts.length} parsed workouts`);
-        props.setWorkouts(parsedWorkouts);
-      })
+      .then(uploadToDb)
+      .then(successHandler)
       .catch((reason) => {
         console.log(reason);
         errorHandler(
-          `Could not parse the workout files. urrently only files coming from the Garmin Workout Downloader browser extension are supported. Technical error: ${reason}`
+          `Could not parse & upload the workout files. Currently only files coming from the Garmin Workout Downloader browser extension are supported. Technical error: ${reason}`
         );
       });
   };
+
+  if (user?.email === "demo@demo.com") {
+    return (
+      <div className="text-xl">
+        This is a limited live demo showing the basics of the UI with sample
+        data. If you want to upload your own workouts, sign out and create a new
+        account.
+      </div>
+    );
+  }
 
   return <FileUpload fileHandler={fileHandler} />;
 }

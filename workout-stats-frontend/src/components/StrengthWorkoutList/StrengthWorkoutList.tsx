@@ -1,4 +1,3 @@
-import { Workout } from "../../models/workout";
 import dateFormat from "dateformat";
 import { WSTable } from "../WSTable/WSTable";
 import { formatDuration } from "../../common/functions";
@@ -7,6 +6,7 @@ import { useState } from "react";
 import "./StrengthWorkoutList.css";
 import { useRecoilValue } from "recoil";
 import { strengthWorkoutsState } from "../../common/recoilStateDefs";
+import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
 
 export function StrengthWorkoutList() {
   const [condensed, setCondensed] = useState(true);
@@ -92,6 +92,10 @@ export function StrengthWorkoutList() {
       );
     });
   };
+
+  if (!workouts?.length) {
+    return <WorkoutDataFetch />;
+  }
 
   return (
     <>

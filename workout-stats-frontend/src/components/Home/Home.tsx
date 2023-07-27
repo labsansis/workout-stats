@@ -8,6 +8,7 @@ import {
   strengthWorkoutsState,
   workoutsState,
 } from "../../common/recoilStateDefs";
+import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
 
 export function Home() {
   const strengthWorkouts = useRecoilValue<Workout[]>(strengthWorkoutsState);
@@ -42,6 +43,10 @@ export function Home() {
     );
     return ws;
   };
+
+  if (!workouts?.length) {
+    return <WorkoutDataFetch />;
+  }
 
   return (
     <>

@@ -22,12 +22,6 @@ export default function WorkoutUploadPage() {
           </a>{" "}
           browser plugin.
         </p>
-        <p>
-          Note that currently the data isn't being saved anywhere. When you
-          upload the files, you can explore your workouts until you close this
-          window. After that you'll need to re-upload the files again. Proper
-          uploads are in the making.
-        </p>
       </div>
 
       <WorkoutUpload
