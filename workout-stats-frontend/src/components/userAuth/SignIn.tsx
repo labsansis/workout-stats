@@ -6,18 +6,24 @@ import * as Yup from "yup";
 import FormTextInput from "../formInputs/FormTextInput";
 import { useNavigate, Link } from "react-router-dom";
 import useFirebaseAuthentication from "../../common/hooks/useFirebaseAuthentication";
+import { userState } from "../../common/recoilStateDefs";
+import { useRecoilState } from "recoil";
 
 export default function SignIn() {
   const [serverErrorCode, setServerErrorCode] = useState("");
   const navigate = useNavigate();
   const fbsUser = useFirebaseAuthentication();
+  const [user, setUser] = useRecoilState(userState);
 
   const WRONG_PASSWORD_CODE = "auth/wrong-password";
   const USER_NOT_FOUND_CODE = "auth/user-not-found";
 
   useEffect(() => {
     if (!!fbsUser) {
-      // setUser({name: fbsUser.displayName as string, email: fbsUser.email as string});
+      setUser({
+        name: fbsUser.displayName as string,
+        email: fbsUser.email as string,
+      });
       navigate("/home");
     }
   }, [fbsUser]);

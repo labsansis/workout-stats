@@ -3,7 +3,9 @@ import { firebaseAuth } from "../../firebase";
 import { User as FirebaseUser } from "firebase/auth";
 
 const useFirebaseAuthentication = () => {
-  const [authUser, setAuthUser] = useState<FirebaseUser | null>(null);
+  const [authUser, setAuthUser] = useState<FirebaseUser | null>(
+    firebaseAuth.currentUser
+  );
 
   useEffect(() => {
     const unlisten = firebaseAuth.onAuthStateChanged((authUser) => {

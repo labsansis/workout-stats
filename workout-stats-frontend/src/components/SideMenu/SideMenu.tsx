@@ -1,28 +1,19 @@
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import { useState } from "react";
 import "./SideMenu.css"; // CSS styles for the SideMenu component
-import { Link, useNavigate } from "react-router-dom";
-import { firebaseAuth } from "../../firebase";
-import { signOut } from "firebase/auth";
-import useFirebaseAuthentication from "../../common/hooks/useFirebaseAuthentication";
+import { Link } from "react-router-dom";
+import { userState } from "../../common/recoilStateDefs";
+import { useRecoilValue } from "recoil";
 
 const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const fbsUser = useFirebaseAuthentication();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log("fbs user");
-    console.log(fbsUser);
-  }, []);
+  const user = useRecoilValue(userState);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleSignoutClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    signOut(firebaseAuth);
-    navigate("/");
+  const getUserDisplayName = () => {
+    return user?.name || user?.email;
   };
 
   return (
@@ -35,11 +26,9 @@ const SideMenu = () => {
         <Link to="/strength">Strength Workouts</Link>
         <Link to="/exercises">Exercises</Link>
         <div className="menu-user-line bg-[#d1fae5]">
-          {fbsUser?.displayName || fbsUser?.email}
+          {getUserDisplayName()}
         </div>
-        <Link to="/" onClick={handleSignoutClick}>
-          Sign out
-        </Link>
+        <Link to="/signout">Sign out</Link>
       </div>
     </div>
   );

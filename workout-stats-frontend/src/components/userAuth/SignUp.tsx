@@ -6,17 +6,23 @@ import * as Yup from "yup";
 import FormTextInput from "../formInputs/FormTextInput";
 import { useNavigate, Link } from "react-router-dom";
 import useFirebaseAuthentication from "../../common/hooks/useFirebaseAuthentication";
+import { userState } from "../../common/recoilStateDefs";
+import { useRecoilState } from "recoil";
 
 export default function SignUp() {
   const [serverErrorCode, setServerErrorCode] = useState("");
   const navigate = useNavigate();
   const fbsUser = useFirebaseAuthentication();
+  const [user, setUser] = useRecoilState(userState);
 
   const EMAIL_ALREADY_IN_USE_CODE = "auth/email-already-in-use";
 
   useEffect(() => {
     if (!!fbsUser) {
-      // setUser({name: fbsUser.displayName as string, email: fbsUser.email as string});
+      setUser({
+        name: fbsUser.displayName as string,
+        email: fbsUser.email as string,
+      });
       navigate("/home");
     }
   }, [fbsUser]);
@@ -36,7 +42,6 @@ export default function SignUp() {
         console.log(userCredential);
         console.log(userCredential.user);
         await updateProfile(userCredential.user, { displayName: name });
-        setSubmitting(false);
         return userCredential.user;
       })
       .catch((error) => {

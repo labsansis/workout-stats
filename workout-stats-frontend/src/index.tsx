@@ -8,6 +8,7 @@ import { Dashboard } from "./components/Dashboard/Dashboard";
 import { RecoilRoot } from "recoil";
 import SignUp from "./components/userAuth/SignUp";
 import SignIn from "./components/userAuth/SignIn";
+import SignOut from "./components/userAuth/SignOut";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "signin",
     element: <SignIn />,
+  },
+  {
+    path: "signout",
+    element: <SignOut />,
   },
 ]);
 
