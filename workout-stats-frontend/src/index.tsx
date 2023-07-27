@@ -32,6 +32,10 @@ const router = createBrowserRouter([
     element: <Dashboard page="exercises" />,
   },
   {
+    path: "upload",
+    element: <Dashboard page="upload" />,
+  },
+  {
     path: "signup",
     element: <SignUp />,
   },

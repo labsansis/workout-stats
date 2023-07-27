@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { firebaseAuth } from "../../firebase";
 import { userState } from "../../common/recoilStateDefs";
 import { useRecoilValue } from "recoil";
+import WorkoutUploadPage from "../WorkoutUploadPage/WorkoutUploadPage";
 
 export function Dashboard({ page }: DashboardProps) {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export function Dashboard({ page }: DashboardProps) {
         {page === "home" && <Home />}
         {page === "strength" && <StrengthWorkoutList />}
         {page === "exercises" && <ExercisesSummary />}
+        {page === "upload" && <WorkoutUploadPage />}
       </div>
     </div>
   );

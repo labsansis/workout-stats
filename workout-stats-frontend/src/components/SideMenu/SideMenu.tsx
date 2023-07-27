@@ -28,6 +28,7 @@ const SideMenu = () => {
         <div className="menu-user-line bg-[#d1fae5]">
           {getUserDisplayName()}
         </div>
+        <Link to="/upload">Upload files</Link>
         <Link to="/signout">Sign out</Link>
       </div>
     </div>
