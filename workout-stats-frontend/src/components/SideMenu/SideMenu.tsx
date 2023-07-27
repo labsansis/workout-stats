@@ -22,13 +22,21 @@ const SideMenu = () => {
         {isOpen ? "Close" : "Menu"}
       </button>
       <div className="menu-content">
-        <Link to="/home">Home</Link>
-        <Link to="/strength">Strength Workouts</Link>
-        <Link to="/exercises">Exercises</Link>
+        <Link to="/home" onClick={toggleMenu}>
+          Home
+        </Link>
+        <Link to="/strength" onClick={toggleMenu}>
+          Strength Workouts
+        </Link>
+        <Link to="/exercises" onClick={toggleMenu}>
+          Exercises
+        </Link>
         <div className="menu-user-line bg-[#d1fae5]">
           {getUserDisplayName()}
         </div>
-        <Link to="/upload">Upload files</Link>
+        <Link to="/upload" onClick={toggleMenu}>
+          Upload files
+        </Link>
         <Link to="/signout">Sign out</Link>
       </div>
     </div>
