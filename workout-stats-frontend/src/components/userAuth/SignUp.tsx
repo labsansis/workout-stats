@@ -4,15 +4,15 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormTextInput from "../formInputs/FormTextInput";
-import { userState } from "../../common/recoilStateDefs";
-import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import useFirebaseAuthentication from "../../common/hooks/useFirebaseAuthentication";
 
 export default function SignUp() {
-  const [serverError, setServerError] = useState("");
+  const [serverErrorCode, setServerErrorCode] = useState("");
   const navigate = useNavigate();
   const fbsUser = useFirebaseAuthentication();
+
+  const EMAIL_ALREADY_IN_USE_CODE = "auth/email-already-in-use";
 
   useEffect(() => {
     if (!!fbsUser) {
@@ -43,9 +43,16 @@ export default function SignUp() {
         const errorMessage = error.message;
         console.log("Error creating a user");
         console.log(`Error code ${errorCode} message ${errorMessage}`);
-        setServerError(errorMessage);
+        setServerErrorCode(errorCode);
         setSubmitting(false);
       });
+  };
+
+  const formatServerError = () => {
+    if (serverErrorCode === EMAIL_ALREADY_IN_USE_CODE) {
+      return null;
+    }
+    return "There was an error signing up. Please try again or contact us.";
   };
 
   const checkCurrentAuth = () => {
@@ -80,7 +87,15 @@ export default function SignUp() {
         <Form>
           <FormTextInput label="Name" name="name" type="text" />
 
-          <FormTextInput label="Email" name="email" type="email" />
+          <FormTextInput
+            label="Email"
+            name="email"
+            type="email"
+            errorOverride={
+              (serverErrorCode === EMAIL_ALREADY_IN_USE_CODE || undefined) &&
+              "This email is already registered"
+            }
+          />
 
           <FormTextInput label="Password" name="password" type="password" />
 
@@ -90,7 +105,7 @@ export default function SignUp() {
           >
             Submit
           </button>
-          {!!serverError && <div>Error signing up: {serverError}</div>}
+          {!!serverErrorCode && <div>Error signing up: {serverErrorCode}</div>}
         </Form>
       </Formik>
     </div>

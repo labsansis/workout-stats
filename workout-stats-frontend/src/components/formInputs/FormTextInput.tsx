@@ -9,13 +9,21 @@ type BuiltInTextInputProps = React.DetailedHTMLProps<
   HTMLInputElement
 >;
 
-type TextInputProps = { label: string; name: string } & BuiltInTextInputProps;
+type CustomTextInputProps = {
+  label: string;
+  name: string;
+  errorOverride?: string;
+};
 
-const FormTextInput = ({ label, ...props }: TextInputProps) => {
+type TextInputProps = CustomTextInputProps & BuiltInTextInputProps;
+
+const FormTextInput = ({ label, errorOverride, ...props }: TextInputProps) => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
   // which we can spread on <input>. We can use field meta to show an error
   // message if the field is invalid and it has been touched (i.e. visited)
   const [field, meta] = useField(props);
+
+  const errorText = errorOverride || (meta.touched && meta.error);
 
   return (
     <div>
@@ -26,9 +34,7 @@ const FormTextInput = ({ label, ...props }: TextInputProps) => {
         {...props}
       />
       <div className="text-sm text-[#b91c1c] min-h-[2em] px-[0.5em]">
-        {meta.touched && meta.error ? (
-          <div className="error">{meta.error}</div>
-        ) : null}
+        {errorText && <div className="error">{errorText}</div>}
       </div>
     </div>
   );
