@@ -46,15 +46,23 @@ function App() {
       <div className="mx-auto md:w-1/2 px-4">
         <div className="text-xl my-10">
           This is a strength training analytics tool meant to complement
-          Garmin's UI. To start, sign in or explore a live demo.
+          Garmin's Connect UI. To start, sign in or explore a live demo.
         </div>
 
-        <Link
-          to="/signup"
-          className="text-xl p-4 bold text-white bg-[#0891b2] m-4"
-        >
-          Sign Up
-        </Link>
+        <div className="text-center">
+          <Link
+            to="/signup"
+            className="text-xl p-4 font-bold text-white bg-[#0891b2] m-4 rounded-xl"
+          >
+            Sign Up
+          </Link>
+          <Link
+            to="/signin"
+            className="text-xl p-4 font-bold text-white bg-[#0891b2] m-4 rounded-xl"
+          >
+            Sign In
+          </Link>
+        </div>
 
         {/* <div className="text-lg my-10">
           or look at a{" "}

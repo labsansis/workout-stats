@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard/Dashboard";
 import { RecoilRoot } from "recoil";
 import SignUp from "./components/userAuth/SignUp";
+import SignIn from "./components/userAuth/SignIn";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "signup",
     element: <SignUp />,
+  },
+  {
+    path: "signin",
+    element: <SignIn />,
   },
 ]);
 
