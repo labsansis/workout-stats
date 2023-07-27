@@ -43,7 +43,7 @@ function App() {
 
   return (
     <>
-      <div className="mx-auto md:w-1/2">
+      <div className="mx-auto md:w-1/2 px-4">
         <div className="text-xl my-10">
           This is a strength training analytics tool meant to complement
           Garmin's UI. To start, sign in or explore a live demo.

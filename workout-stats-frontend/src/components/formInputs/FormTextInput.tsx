@@ -18,13 +18,19 @@ const FormTextInput = ({ label, ...props }: TextInputProps) => {
   const [field, meta] = useField(props);
 
   return (
-    <>
-      <label htmlFor={props.id || props.name}>{label}</label>
-      <input className="text-input" {...field} {...props} />
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
-    </>
+    <div>
+      <input
+        className="border-2 rounded p-2 w-full"
+        placeholder={label}
+        {...field}
+        {...props}
+      />
+      <div className="text-sm text-[#b91c1c] min-h-[2em] px-[0.5em]">
+        {meta.touched && meta.error ? (
+          <div className="error">{meta.error}</div>
+        ) : null}
+      </div>
+    </div>
   );
 };
 

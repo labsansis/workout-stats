@@ -53,7 +53,7 @@ export default function SignUp() {
   };
 
   return (
-    <div>
+    <div className="mx-auto md:w-[30em] px-4 py-10">
       <h1>Sign Up</h1>
 
       <Formik
@@ -65,41 +65,31 @@ export default function SignUp() {
         validationSchema={Yup.object({
           name: Yup.string()
             .max(50, "Must be 50 characters or less")
-            .required("Required"),
+            .required("Name is required"),
           email: Yup.string()
             .email("Invalid email address")
-            .required("Required"),
+            .required("Email is required"),
           password: Yup.string()
             .min(8, "Must be at least 8 characters long")
-            .required("Required"),
+            .required("Password is required"),
         })}
         onSubmit={(values, { setSubmitting }) =>
           handleSignup(values, setSubmitting)
         }
       >
         <Form>
-          <FormTextInput
-            label="Name"
-            name="name"
-            type="text"
-            placeholder="Rob Brown"
-          />
+          <FormTextInput label="Name" name="name" type="text" />
 
-          <FormTextInput
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="rob@gmail.com"
-          />
+          <FormTextInput label="Email" name="email" type="email" />
 
-          <FormTextInput
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="Password"
-          />
+          <FormTextInput label="Password" name="password" type="password" />
 
-          <button type="submit">Submit</button>
+          <button
+            type="submit"
+            className="py-2 bg-[#0891b2] block w-full rounded"
+          >
+            Submit
+          </button>
           {!!serverError && <div>Error signing up: {serverError}</div>}
         </Form>
       </Formik>
