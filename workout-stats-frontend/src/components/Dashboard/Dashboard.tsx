@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
-import { Workout } from "../../models/workout";
+import { useEffect } from "react";
 import SideMenu from "../SideMenu/SideMenu";
 import "./Dashboard.css";
 import { StrengthWorkoutList } from "../StrengthWorkoutList/StrengthWorkoutList";
 import { ExercisesSummary } from "../ExercisesSummary/ExercisesSummary";
 import { Home } from "../Home/Home";
 import { useNavigate } from "react-router-dom";
-import { firebaseAuth } from "../../firebase";
 import { userState } from "../../common/recoilStateDefs";
 import { useRecoilValue } from "recoil";
 import WorkoutUploadPage from "../WorkoutUploadPage/WorkoutUploadPage";
