@@ -22,6 +22,7 @@ export default function SignUp() {
       setUser({
         name: fbsUser.displayName as string,
         email: fbsUser.email as string,
+        id: fbsUser.uid,
       });
       navigate("/home");
     }

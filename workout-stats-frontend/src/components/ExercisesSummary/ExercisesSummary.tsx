@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
-import { ExerciseSet, Workout } from "../../models/workout";
+import { ExerciseSet } from "../../models/workout";
 import { WSTable } from "../WSTable/WSTable";
 import dateFormat from "dateformat";
 import Chart, { Props as ApexChartProps } from "react-apexcharts";
 import { useRecoilValue } from "recoil";
 import { strengthWorkoutsState } from "../../common/recoilStateDefs";
+import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
 
 export function ExercisesSummary() {
   const [exerciseToPlot, setExerciseToPlot] = useState("");
@@ -101,6 +102,10 @@ export function ExercisesSummary() {
       },
     };
   };
+
+  if (!workouts?.length) {
+    return <WorkoutDataFetch />;
+  }
 
   return (
     <>

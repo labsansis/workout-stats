@@ -35,7 +35,7 @@ function App() {
 
   const handleDemoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setUser({ name: "Demo User", email: "demo@demo.com" });
+    setUser({ name: "Demo User", email: "demo@demo.com", id: "demo" });
     setDemoData();
     navigate("/home");
   };
