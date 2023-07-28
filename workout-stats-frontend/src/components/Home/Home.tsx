@@ -18,10 +18,10 @@ export function Home() {
 
   const numWorkoutsPerWeek = (): number => {
     const minTs = Math.min(
-      ...strengthWorkouts.map((w) => w.startTime.getTime())
+      ...strengthWorkouts.map((w) => w.startTime.getTime()),
     );
     const maxTs = Math.max(
-      ...strengthWorkouts.map((w) => w.startTime.getTime())
+      ...strengthWorkouts.map((w) => w.startTime.getTime()),
     );
 
     if (maxTs === minTs) return 1;
@@ -32,14 +32,15 @@ export function Home() {
 
   const numWorkoutsLast7Days = (): number => {
     return strengthWorkouts.filter(
-      (w) => w.startTime.getTime() > new Date().getTime() - MILLISECONDS_IN_WEEK
+      (w) =>
+        w.startTime.getTime() > new Date().getTime() - MILLISECONDS_IN_WEEK,
     ).length;
   };
 
   const byTimeDescending = (): Workout[] => {
     const ws = [...workouts];
     ws.sort((w1, w2) =>
-      w1.startTime > w2.startTime ? -1 : w1.startTime < w2.startTime ? 1 : 0
+      w1.startTime > w2.startTime ? -1 : w1.startTime < w2.startTime ? 1 : 0,
     );
     return ws;
   };

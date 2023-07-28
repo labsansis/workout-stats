@@ -6,12 +6,11 @@ import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard/Dashboard";
 import { RecoilRoot } from "recoil";
-import SignUp from "./components/userAuth/SignUp";
-import SignIn from "./components/userAuth/SignIn";
 import SignOut from "./components/userAuth/SignOut";
+import UserAuthPage from "./components/userAuth/UserAuthPage";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 
 const router = createBrowserRouter([
@@ -37,11 +36,11 @@ const router = createBrowserRouter([
   },
   {
     path: "signup",
-    element: <SignUp />,
+    element: <UserAuthPage kind="signup" />,
   },
   {
     path: "signin",
-    element: <SignIn />,
+    element: <UserAuthPage kind="signin" />,
   },
   {
     path: "signout",
@@ -54,7 +53,7 @@ root.render(
     <RecoilRoot>
       <RouterProvider router={router} />
     </RecoilRoot>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function

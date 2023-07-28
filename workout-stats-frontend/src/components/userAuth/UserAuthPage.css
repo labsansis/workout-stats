@@ -1,0 +1,11 @@
+.sso-button {
+  position: relative;
+}
+.sso-icon {
+  position: absolute;
+  top: 0.2em;
+  left: 0.2em;
+  width: 1.8em;
+  height: 1.8em;
+  display: inline;
+}

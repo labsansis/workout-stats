@@ -11,7 +11,9 @@
   border: 2px dashed #555;
   color: #444;
   cursor: pointer;
-  transition: background 0.2s ease-in-out, border 0.2s ease-in-out;
+  transition:
+    background 0.2s ease-in-out,
+    border 0.2s ease-in-out;
 }
 
 .drop-container:hover {

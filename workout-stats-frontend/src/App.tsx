@@ -23,13 +23,13 @@ function App() {
             return {
               ...es,
               startTime: new Date(
-                new Date().getTime() - es.secondsInPast * 1000
+                new Date().getTime() - es.secondsInPast * 1000,
               ),
               weightUnit: es.weightUnit as WeightUnit,
             };
           }),
         };
-      })
+      }),
     );
   };
 
