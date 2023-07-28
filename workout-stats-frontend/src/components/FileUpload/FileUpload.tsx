@@ -83,6 +83,6 @@ type FileUploadProps = {
   fileHandler: (
     fl: FileList | null | File[],
     successHandler: () => void,
-    errorHandler: (err: string) => void
+    errorHandler: (err: string) => void,
   ) => void;
 };

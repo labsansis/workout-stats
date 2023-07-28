@@ -46,7 +46,7 @@ export function ExercisesSummary() {
    * `weights` is the highest weight of that day corresponding to every element of `dates`.
    */
   const extractExerciseWeightSeries = (
-    exerciseKey: string
+    exerciseKey: string,
   ): { dates: string[]; weights: number[] } => {
     const weightByDay: { [day: string]: { weight: number; date: Date } } = {};
     for (let es of setsByExercise[exerciseKey]) {
@@ -65,7 +65,7 @@ export function ExercisesSummary() {
       };
     });
     dayDateWeight.sort((a, b) =>
-      a.date > b.date ? 1 : a.date < b.date ? -1 : 0
+      a.date > b.date ? 1 : a.date < b.date ? -1 : 0,
     );
     // what we called "day" before interally now becomes "date" for external use
     const dates = dayDateWeight.map((ddw) => ddw.day);

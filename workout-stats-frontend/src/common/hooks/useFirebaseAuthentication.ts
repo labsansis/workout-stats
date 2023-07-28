@@ -4,7 +4,7 @@ import { User as FirebaseUser } from "firebase/auth";
 
 const useFirebaseAuthentication = () => {
   const [authUser, setAuthUser] = useState<FirebaseUser | null>(
-    firebaseAuth.currentUser
+    firebaseAuth.currentUser,
   );
 
   useEffect(() => {

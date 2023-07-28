@@ -13,7 +13,7 @@ export function StrengthWorkoutList() {
   const workouts = [...useRecoilValue(strengthWorkoutsState)];
   // sort in reverse order by date
   workouts.sort((w1, w2) =>
-    w1.startTime > w2.startTime ? -1 : w1.startTime < w2.startTime ? 1 : 0
+    w1.startTime > w2.startTime ? -1 : w1.startTime < w2.startTime ? 1 : 0,
   );
 
   const formatWeight = (weight: number | undefined): string => {

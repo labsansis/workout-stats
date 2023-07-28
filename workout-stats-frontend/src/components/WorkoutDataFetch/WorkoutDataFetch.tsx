@@ -21,7 +21,7 @@ export default function WorkoutDataFetch() {
 
   const prettifyGarminExerciseName = (
     name: string | null,
-    category: string | undefined
+    category: string | undefined,
   ): string => {
     if (!name && !category) return "Unknown";
     if (!name) name = category as string;
@@ -49,7 +49,7 @@ export default function WorkoutDataFetch() {
           es.exercise.name = ges.exercises[0].name;
           es.exercise.displayName = prettifyGarminExerciseName(
             ges.exercises[0].name,
-            ges.exercises[0].category
+            ges.exercises[0].category,
           );
           es.repetitionCount = ges.repetitionCount;
           //   Garmin seems to store it in grams
@@ -69,7 +69,7 @@ export default function WorkoutDataFetch() {
     // fetch all workouts for this user
     getDocs(collection(db, "users", user.id, "rawWorkouts"))
       .then((qsnap) =>
-        qsnap.docs.map((docsnap) => docsnap.data() as GarminActivity)
+        qsnap.docs.map((docsnap) => docsnap.data() as GarminActivity),
       )
       .then((activities) => activities.map(parseGarminActivity))
       .then(setWorkouts)
@@ -87,9 +87,42 @@ export default function WorkoutDataFetch() {
 
   if (fetchSuccess && !workouts?.length) {
     return (
-      <div className="text-xl text-center my-10">
-        No workout data found. <Link to="/upload">Upload some files</Link> to
-        get started.
+      <div className="text-l my-10">
+        <p className="mb-4">
+          Hi there! This is where you'll see your workout stats. Now you just
+          need to upload some data to get started.
+        </p>
+        <p className="mb-4 font-bold">Upload what?</p>
+        <p className="mb-4">
+          In an ideal world this tool would just connect to your Garmin account,
+          retrieve your workout data and display it here. However, Garmin's APIs
+          are just not built for strength training data.
+        </p>
+        <p className="mb-4">
+          So for now we are using a workaround, and getting data from Garmin
+          into Workout Stats is a two step process:
+        </p>
+        <ol className="mb-4 list-decimal">
+          <li className="ml-10 mb-1">
+            Install the{" "}
+            <a
+              href="https://github.com/labsansis/garmin-workout-downloader/"
+              className="underline"
+              target="_blank"
+            >
+              Garmin Workout Downloader
+            </a>{" "}
+            browser extension and use it to download your latest workouts. At
+            the end you should have a JSON file downloaded to your device.
+          </li>
+          <li className="ml-10 mb-2">
+            Come back and upload this file here by following{" "}
+            <Link to="/upload" className="underline">
+              this link
+            </Link>
+            .
+          </li>
+        </ol>
       </div>
     );
   }

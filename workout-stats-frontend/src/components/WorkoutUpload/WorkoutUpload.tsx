@@ -37,9 +37,9 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
           "users",
           user?.id as string,
           "rawWorkouts",
-          processedActivityId
+          processedActivityId,
         ),
-        activity
+        activity,
       );
     }
     return batch.commit();
@@ -48,7 +48,7 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
   const fileHandler = (
     workoutFiles: FileList | null | File[],
     successHandler: () => void,
-    errorHandler: (err: string) => void
+    errorHandler: (err: string) => void,
   ) => {
     console.log("fileHandler callback");
     const fileReaders: FileReader[] = [];
@@ -76,7 +76,7 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
           };
           fileReader.readAsText(file);
         });
-      }
+      },
     );
     Promise.all(promises)
       .then((workoutDataSets) => {
@@ -87,7 +87,7 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
       .catch((reason) => {
         console.log(reason);
         errorHandler(
-          `Could not parse & upload the workout files. Currently only files coming from the Garmin Workout Downloader browser extension are supported. Technical error: ${reason}`
+          `Could not parse & upload the workout files. Currently only files coming from the Garmin Workout Downloader browser extension are supported. Technical error: ${reason}`,
         );
       });
   };
