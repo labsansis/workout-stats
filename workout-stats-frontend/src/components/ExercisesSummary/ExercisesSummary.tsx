@@ -6,6 +6,7 @@ import Chart, { Props as ApexChartProps } from "react-apexcharts";
 import { useRecoilValue } from "recoil";
 import { strengthWorkoutsState } from "../../common/recoilStateDefs";
 import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
+import { sortBy } from "lodash";
 
 export function ExercisesSummary() {
   const [exerciseToPlot, setExerciseToPlot] = useState("");
@@ -112,13 +113,19 @@ export function ExercisesSummary() {
       <h1>Exercises</h1>
       <WSTable
         headers={["Exercise", "Total sets", "PR", "Last done", ""]}
-        data={Object.keys(setsByExercise).map((k) => [
-          setsByExercise[k][0].exercise.displayName,
-          setsByExercise[k].length,
-          getExercisePR(k) || "-",
-          dateFormat(getLatestDate(k), "ddd dd mmm yyyy"),
+        // look into a table solution to not have to do the sorting manually
+        data={sortBy(
+          Object.keys(setsByExercise).map((key) => {
+            return { key, sets: setsByExercise[key] };
+          }),
+          (o) => o.key,
+        ).map(({ key, sets }) => [
+          sets[0].exercise.displayName,
+          sets.length,
+          getExercisePR(key) || "-",
+          dateFormat(getLatestDate(key), "ddd dd mmm yyyy"),
           <button
-            onClick={() => handlePlotButtonClick(k)}
+            onClick={() => handlePlotButtonClick(key)}
             className="bg-blue-600 text-white rounded-full px-2 font-medium text-s shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-blue-500 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
           >
             Plot
