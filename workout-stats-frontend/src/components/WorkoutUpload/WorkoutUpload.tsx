@@ -47,7 +47,6 @@ export function WorkoutUpload() {
     successHandler: () => void,
     errorHandler: (err: string) => void,
   ) => {
-    console.log("fileHandler callback");
     const fileReaders: FileReader[] = [];
     if (!(workoutFiles && workoutFiles.length)) {
       return;
@@ -59,8 +58,6 @@ export function WorkoutUpload() {
           fileReaders.push(fileReader);
           fileReader.onload = (e) => {
             const result = e.target?.result as string;
-            console.log("Got the file contents");
-            console.log(result);
             if (result) {
               resolve(JSON.parse(result));
             }
@@ -84,7 +81,7 @@ export function WorkoutUpload() {
       // clear local workouts cache so that it's reloaded from Firebase
       .then(() => setWorkouts([]))
       .catch((reason) => {
-        console.log(reason);
+        console.error(reason);
         errorHandler(
           `Could not parse & upload the workout files. Currently only files coming from the Garmin Workout Downloader browser extension are supported. Technical error: ${reason}`,
         );

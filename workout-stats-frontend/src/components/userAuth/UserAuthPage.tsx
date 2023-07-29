@@ -20,7 +20,7 @@ export default function UserAuthPage({ kind }: UserAuthPageProps) {
     firebaseAuth.useDeviceLanguage();
     const provider = new GoogleAuthProvider();
     signInWithPopup(firebaseAuth, provider).catch((error) => {
-      console.log(error);
+      console.error(error);
       setSsoErrorCode(error.code);
     });
   };

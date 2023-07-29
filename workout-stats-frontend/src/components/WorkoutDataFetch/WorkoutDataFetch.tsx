@@ -79,8 +79,7 @@ export default function WorkoutDataFetch() {
       })
       .catch((reason) => {
         setFetchSuccess(false);
-        console.log("ERROR");
-        console.log(reason);
+        console.error(reason);
         setFetchError(reason);
       });
   }, []);
