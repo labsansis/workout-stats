@@ -3,6 +3,8 @@ import "./SideMenu.css"; // CSS styles for the SideMenu component
 import { Link } from "react-router-dom";
 import { userState } from "../../common/recoilStateDefs";
 import { useRecoilValue } from "recoil";
+import { FiMenu } from "react-icons/fi";
+import { RiCloseFill } from "react-icons/ri";
 
 const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,8 +20,11 @@ const SideMenu = () => {
 
   return (
     <div className={`side-menu ${isOpen ? "open" : ""}`}>
-      <button className="toggle-button" onClick={toggleMenu}>
-        {isOpen ? "Close" : "Menu"}
+      <button
+        className="toggle-button rounded text-slate-200 bg-cyan-800"
+        onClick={toggleMenu}
+      >
+        {isOpen ? <RiCloseFill /> : <FiMenu />}
       </button>
       <div className="menu-content">
         <Link to="/home" onClick={toggleMenu}>

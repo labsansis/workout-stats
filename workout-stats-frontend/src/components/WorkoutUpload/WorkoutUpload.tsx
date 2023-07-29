@@ -1,23 +1,20 @@
 import { db } from "../../firebase";
 import { GarminActivity } from "../../models/garmin";
-import {
-  Exercise,
-  ExerciseSet,
-  WeightUnit,
-  Workout,
-} from "../../models/workout";
 import { FileUpload } from "../FileUpload/FileUpload";
 import { writeBatch, doc } from "firebase/firestore";
 import { userState } from "../../common/recoilStateDefs";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { workoutsState } from "../../common/recoilStateDefs";
 
 /**
- * A component to upload one or more workout files, parse them and return structured workouts.
+ * This component lets users add one or more workout files, then ligthly parses them and
+ * uploads them to the database.
  *
  * Currently only files coming from the Garmin Workout Downloader browser extension are supported.
  */
-export function WorkoutUpload(props: WorkoutUploadProps) {
+export function WorkoutUpload() {
   const user = useRecoilValue(userState);
+  const [workouts, setWorkouts] = useRecoilState(workoutsState);
 
   /**
    * Uploads the raw Garmin workouts to the Cloud Firestore db.
@@ -50,7 +47,6 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
     successHandler: () => void,
     errorHandler: (err: string) => void,
   ) => {
-    console.log("fileHandler callback");
     const fileReaders: FileReader[] = [];
     if (!(workoutFiles && workoutFiles.length)) {
       return;
@@ -62,8 +58,6 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
           fileReaders.push(fileReader);
           fileReader.onload = (e) => {
             const result = e.target?.result as string;
-            console.log("Got the file contents");
-            console.log(result);
             if (result) {
               resolve(JSON.parse(result));
             }
@@ -84,8 +78,10 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
       })
       .then(uploadToDb)
       .then(successHandler)
+      // clear local workouts cache so that it's reloaded from Firebase
+      .then(() => setWorkouts([]))
       .catch((reason) => {
-        console.log(reason);
+        console.error(reason);
         errorHandler(
           `Could not parse & upload the workout files. Currently only files coming from the Garmin Workout Downloader browser extension are supported. Technical error: ${reason}`,
         );
@@ -104,7 +100,3 @@ export function WorkoutUpload(props: WorkoutUploadProps) {
 
   return <FileUpload fileHandler={fileHandler} />;
 }
-
-type WorkoutUploadProps = {
-  setWorkouts: (workouts: Workout[]) => void;
-};

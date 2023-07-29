@@ -43,9 +43,16 @@ function App() {
   return (
     <>
       <div className="mx-auto md:w-1/2 px-4">
-        <div className="text-xl py-10">
+        <div className="text-center text-3xl pt-10 font-bold">
+          Workout Stats
+        </div>
+        <div className="text-xl pt-10 pb-7">
           This is a strength training analytics tool meant to complement
-          Garmin's Connect UI. To start, sign in or explore a live demo.
+          Garmin's Connect UI. You can look at your latest workouts at a glance
+          and analyze your performance over time.
+        </div>
+        <div className="text-xl pb-7">
+          To start, sign in or explore a simple live demo.
         </div>
 
         <div className="text-center py-10">
@@ -68,6 +75,17 @@ function App() {
           >
             <MdOutlineAutoGraph className="inline mx-1" /> Live Demo
           </Link>
+        </div>
+        <div>
+          This project is open source, you can check out the Github repo{" "}
+          <a
+            href="https://github.com/labsansis/workout-stats"
+            target="_blank"
+            className="underline"
+          >
+            here
+          </a>
+          .
         </div>
       </div>
       <ToastContainer />
