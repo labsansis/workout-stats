@@ -24,12 +24,7 @@ export default function WorkoutUploadPage() {
         </p>
       </div>
 
-      <WorkoutUpload
-        setWorkouts={(workouts) => {
-          setWorkouts(workouts);
-          navigate("/home");
-        }}
-      />
+      <WorkoutUpload />
     </div>
   );
 }
