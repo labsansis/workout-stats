@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { firebaseAuth } from "../../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useNavigate, useLocation, redirect } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useFirebaseAuthentication from "../../common/hooks/useFirebaseAuthentication";
 import { userState } from "../../common/recoilStateDefs";
 import { useRecoilState } from "recoil";
