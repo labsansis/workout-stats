@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 import { strengthWorkoutsState } from "../../common/recoilStateDefs";
 import { ExerciseSet } from "../../models/workout";
 import Chart, { Props as ApexChartProps } from "react-apexcharts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { sortBy, sum } from "lodash";
 import PillSelect from "../PillSelect/PillSelect";
 import { CardGrid } from "../cards/CardGrid";
@@ -96,7 +96,9 @@ export default function TrainingVolume() {
   const extractVolumeFromSets = (ess: ExerciseSet[]) => {
     if (volumeType === "weight")
       return Math.round(
-        ess.map((es) => es.weight || 0).reduce((a, b) => a + b),
+        ess
+          .map((es) => (es.weight || 0) * es.repetitionCount)
+          .reduce((a, b) => a + b),
       );
     return ess.length;
   };
