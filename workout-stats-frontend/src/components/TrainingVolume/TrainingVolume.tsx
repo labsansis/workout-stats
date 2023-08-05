@@ -8,6 +8,7 @@ import { sortBy, sum } from "lodash";
 import PillSelect from "../PillSelect/PillSelect";
 import { CardGrid } from "../cards/CardGrid";
 import AnimatedNumber from "../AnimatedNumber/AnimatedNumber";
+import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
 
 export default function TrainingVolume() {
   const workouts = useRecoilValue(strengthWorkoutsState);
@@ -152,6 +153,10 @@ export default function TrainingVolume() {
       height: chartHeight,
     };
   };
+
+  if (!workouts?.length) {
+    return <WorkoutDataFetch />;
+  }
 
   return (
     <>
