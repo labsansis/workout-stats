@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import "./Card.css";
 
 export function Card(props: CardProps) {
@@ -11,7 +12,7 @@ export function Card(props: CardProps) {
 
 export type CardProps = {
   // The value of the card, e.g. "40"
-  value: string;
+  value: ReactNode;
   // The label of the card
   label: string;
 };

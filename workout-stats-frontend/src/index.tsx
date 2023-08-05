@@ -35,6 +35,10 @@ const router = createBrowserRouter([
     element: <Dashboard page="upload" />,
   },
   {
+    path: "volume",
+    element: <Dashboard page="volume" />,
+  },
+  {
     path: "signup",
     element: <UserAuthPage kind="signup" />,
   },
