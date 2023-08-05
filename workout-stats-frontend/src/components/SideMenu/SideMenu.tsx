@@ -36,6 +36,9 @@ const SideMenu = () => {
         <Link to="/exercises" onClick={toggleMenu}>
           Exercises
         </Link>
+        <Link to="/volume" onClick={toggleMenu}>
+          Training Volume
+        </Link>
         <div className="menu-user-line bg-[#d1fae5]">
           {getUserDisplayName()}
         </div>

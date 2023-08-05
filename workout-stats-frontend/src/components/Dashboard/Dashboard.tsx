@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { userState } from "../../common/recoilStateDefs";
 import { useRecoilValue } from "recoil";
 import WorkoutUploadPage from "../WorkoutUploadPage/WorkoutUploadPage";
+import TrainingVolume from "../TrainingVolume/TrainingVolume";
 
 export function Dashboard({ page }: DashboardProps) {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export function Dashboard({ page }: DashboardProps) {
         {page === "strength" && <StrengthWorkoutList />}
         {page === "exercises" && <ExercisesSummary />}
         {page === "upload" && <WorkoutUploadPage />}
+        {page === "volume" && <TrainingVolume />}
       </div>
     </div>
   );
