@@ -3,11 +3,12 @@ import { useRecoilValue } from "recoil";
 import { strengthWorkoutsState } from "../../common/recoilStateDefs";
 import { ExerciseSet } from "../../models/workout";
 import Chart, { Props as ApexChartProps } from "react-apexcharts";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { sortBy, sum } from "lodash";
 import PillSelect from "../PillSelect/PillSelect";
 import { CardGrid } from "../cards/CardGrid";
 import AnimatedNumber from "../AnimatedNumber/AnimatedNumber";
+import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
 
 export default function TrainingVolume() {
   const workouts = useRecoilValue(strengthWorkoutsState);
@@ -16,6 +17,16 @@ export default function TrainingVolume() {
   );
   const [groupingLevel, setGroupingLevel] = useState("coarse");
   const [volumeType, setVolumeType] = useState("sets");
+  const [chartHeight, setChartHeight] = useState("auto");
+  const chartParentRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    setChartHeight(
+      chartParentRef.current && chartParentRef.current.offsetWidth > 500
+        ? "auto"
+        : "300px",
+    );
+  });
 
   const muscleGroupsCoarseMapping: { [key: string]: string } = {
     ABDUCTORS: "LEGS",
@@ -139,8 +150,13 @@ export default function TrainingVolume() {
           },
         },
       },
+      height: chartHeight,
     };
   };
+
+  if (!workouts?.length) {
+    return <WorkoutDataFetch />;
+  }
 
   return (
     <>
@@ -190,7 +206,7 @@ export default function TrainingVolume() {
           },
         ]}
       />
-      <div className="mt-10 w-full xl:w-3/5">
+      <div className="mt-10 w-full xl:w-3/5" ref={chartParentRef}>
         <Chart {...prepChartProps()} />
       </div>
     </>

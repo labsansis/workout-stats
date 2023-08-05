@@ -4,7 +4,7 @@ import "./Dashboard.css";
 import { StrengthWorkoutList } from "../StrengthWorkoutList/StrengthWorkoutList";
 import { ExercisesSummary } from "../ExercisesSummary/ExercisesSummary";
 import { Home } from "../Home/Home";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { userState } from "../../common/recoilStateDefs";
 import { useRecoilValue } from "recoil";
 import WorkoutUploadPage from "../WorkoutUploadPage/WorkoutUploadPage";
@@ -12,11 +12,16 @@ import TrainingVolume from "../TrainingVolume/TrainingVolume";
 
 export function Dashboard({ page }: DashboardProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useRecoilValue(userState);
 
   useEffect(() => {
     if (!user) {
-      navigate("/signin");
+      navigate(
+        `/signin?redirect=${encodeURIComponent(
+          location.pathname + location.search,
+        )}`,
+      );
     }
   }, [user]);
 
