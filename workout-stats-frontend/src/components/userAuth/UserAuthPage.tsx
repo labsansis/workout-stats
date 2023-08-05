@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { firebaseAuth } from "../../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, redirect } from "react-router-dom";
 import useFirebaseAuthentication from "../../common/hooks/useFirebaseAuthentication";
 import { userState } from "../../common/recoilStateDefs";
 import { useRecoilState } from "recoil";
@@ -13,6 +13,7 @@ import "./UserAuthPage.css";
 export default function UserAuthPage({ kind }: UserAuthPageProps) {
   const [ssoErrorCode, setSsoErrorCode] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const fbsUser = useFirebaseAuthentication();
   const [user, setUser] = useRecoilState(userState);
 
@@ -32,7 +33,10 @@ export default function UserAuthPage({ kind }: UserAuthPageProps) {
         email: fbsUser.email as string,
         id: fbsUser.uid,
       });
-      navigate("/home");
+      const redirectPath = decodeURIComponent(
+        new URLSearchParams(location.search).get("redirect") || "",
+      );
+      navigate(redirectPath || "/home");
     }
   }, [fbsUser]);
 
