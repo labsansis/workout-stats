@@ -21,14 +21,15 @@
 
 .menu-content a {
   display: block;
-  padding: 10px 0;
+  padding: 10px 20px;
+  margin: 0 -20px;
   color: #333;
   text-decoration: none;
   transition: color 0.3s ease-in-out;
 }
 
 .menu-content a:hover {
-  color: #007bff;
+  color: rgb(21, 94, 117);
 }
 
 /* Media Query for small screens */
@@ -47,6 +48,9 @@
 }
 
 .menu-user-line {
-  margin: 0 -20px;
-  padding: 10px 20px;
+  margin: 25px -20px 0 -20px;
+  padding: 5px 10px;
+  color: #666666;
+  border-top: 1px solid #999999;
+  font-size: 0.8em;
 }
