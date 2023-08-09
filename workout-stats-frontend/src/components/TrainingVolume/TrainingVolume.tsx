@@ -144,6 +144,7 @@ export default function TrainingVolume() {
         title: {
           text: "Training Volume By Muscle Group",
         },
+        colors: ["#155D75"],
         yaxis: {
           title: {
             text: yAxisTitle,

@@ -10,7 +10,8 @@ export function WSTable(props: WSTableProps) {
   let tableClass = "min-w-full text-left text-sm font-light";
   if (props.fixed) tableClass += " table-fixed";
 
-  let theadClass = "border-b font-medium dark:border-neutral-500 bg-blue-400";
+  let theadClass =
+    "border-b-2 border-cyan-800 font-medium dark:border-neutral-500 bg-gray-50";
   let thClass = "px-6 py-4";
   if (props.lightHeader) {
     theadClass = "border-b font-medium dark:border-neutral-500 bg-transparent";

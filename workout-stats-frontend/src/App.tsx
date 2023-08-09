@@ -58,19 +58,19 @@ function App() {
         <div className="text-center py-10">
           <Link
             to="/signup"
-            className="text-xl p-4 font-bold text-white bg-[#0891b2] hover:bg-[#0b6b82] m-4 rounded-xl border-2 border-[#0891b2] inline-block min-w-[12em]"
+            className="text-xl p-4 font-bold text-white bg-cyan-800 hover:bg-cyan-900 m-4 rounded-xl border-2 border-cyan-800 hover:border-cyan-900 inline-block min-w-[12em]"
           >
             Sign Up
           </Link>
           <Link
             to="/signin"
-            className="text-xl p-4 font-bold text-[#0891b2] bg-white hover:bg-[#e1e1ea] m-4 rounded-xl border-2 border-[#0891b2] inline-block min-w-[12em]"
+            className="text-xl p-4 font-bold text-cyan-800 bg-white hover:bg-[#e1e1ea] m-4 rounded-xl border-2 border-cyan-800 inline-block min-w-[12em]"
           >
             Sign In
           </Link>
           <Link
             to="/demo"
-            className="text-xl p-4 font-bold text-white bg-[#0891b2] m-4 rounded-xl inline-block min-w-[12em]"
+            className="text-xl p-4 font-bold text-white bg-cyan-800 hover:bg-cyan-900 m-4 rounded-xl border-2 border-cyan-800 hover:border-cyan-900 inline-block min-w-[12em]"
             onClick={handleDemoClick}
           >
             <MdOutlineAutoGraph className="inline mx-1" /> Live Demo
