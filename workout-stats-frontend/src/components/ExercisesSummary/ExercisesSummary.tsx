@@ -88,6 +88,7 @@ export function ExercisesSummary() {
         title: {
           text: setsByExercise[exerciseKey][0].exercise.displayName,
         },
+        colors: ["#155D75"],
         labels: dates,
         xaxis: {
           type: "datetime",
@@ -126,7 +127,7 @@ export function ExercisesSummary() {
           dateFormat(getLatestDate(key), "ddd dd mmm yyyy"),
           <button
             onClick={() => handlePlotButtonClick(key)}
-            className="bg-blue-600 text-white rounded-full px-2 font-medium text-s shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-blue-500 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+            className="bg-cyan-800 text-white rounded-full px-2 font-medium text-s shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-cyan-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
           >
             Plot
           </button>,

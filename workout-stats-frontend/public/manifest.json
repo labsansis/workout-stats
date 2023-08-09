@@ -3,8 +3,13 @@
   "name": "Workout Stats",
   "icons": [
     {
-      "src": "favicon.svg",
-      "sizes": "64x64 32x32 24x24 16x16 192x192 512x512",
+      "src": "favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo-icon.svg",
+      "sizes": "64x64 24x24 16x16 192x192 512x512",
       "type": "image/x-icon"
     }
   ],
