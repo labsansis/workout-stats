@@ -85,7 +85,7 @@ function Modal(props: ModalProps) {
         className="fixed top-0 left-0 bg-slate-800 w-full h-full z-[101] opacity-80"
         onClick={props.onRequestClose}
       ></div>
-      <div className="fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] border-2 border-slate-800 rounded-lg p-5 max-w-[90%] lg: max-w-[50%] z-[102] bg-white">
+      <div className="fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] border-2 border-slate-800 rounded-lg p-5 w-[90%] lg:max-w-[50%] z-[102] bg-white">
         <div className="font-bold mb-4 pb-4 border-b-[1px]">{props.title}</div>
         <div>{props.content}</div>
         <div className="my-5 ">
@@ -124,11 +124,13 @@ export default function Account() {
       <h1>Account</h1>
       <div className="mt-4 border-t-[1px]">
         <div className="py-3 border-b-[1px] lg:flex">
-          <div className="lg:w-[250px] lg:font-medium">Email</div>
+          <div className="lg:w-[250px] font-medium text-sm lg:text-base pb-3 lg-pb-0">
+            Email
+          </div>
           <div className="">{user?.email}</div>
         </div>
         <div className="py-3 border-b-[1px] lg:flex">
-          <div className="lg:w-[250px] lg:font-medium">
+          <div className="lg:w-[250px] font-medium text-sm lg:text-base pb-3 lg-pb-0">
             Extension Upload Key{" "}
             <a href="" onClick={handleUploadKeyHelpClick}>
               <LuHelpCircle style={{ display: "inline" }} />
