@@ -9,6 +9,7 @@ import { userState } from "../../common/recoilStateDefs";
 import { useRecoilValue } from "recoil";
 import WorkoutUploadPage from "../WorkoutUploadPage/WorkoutUploadPage";
 import TrainingVolume from "../TrainingVolume/TrainingVolume";
+import Account from "../Account/Account";
 
 export function Dashboard({ page }: DashboardProps) {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ export function Dashboard({ page }: DashboardProps) {
         {page === "exercises" && <ExercisesSummary />}
         {page === "upload" && <WorkoutUploadPage />}
         {page === "volume" && <TrainingVolume />}
+        {page === "account" && <Account />}
       </div>
     </div>
   );
