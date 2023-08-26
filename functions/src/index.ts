@@ -7,13 +7,13 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import { onRequest } from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+import {onRequest} from "firebase-functions/v2/https";
+// import * as logger from "firebase-functions/logger";
 import * as express from "express";
 
-import { initializeApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-import { GarminActivity } from "./models/garmin";
+import {initializeApp} from "firebase-admin/app";
+import {getFirestore} from "firebase-admin/firestore";
+import {GarminActivity} from "./models/garmin";
 
 initializeApp();
 
@@ -28,7 +28,7 @@ app.post("/rawWorkout/garmin", async (req, res) => {
   // retrieve the upload token from the header
   const token = req.headers["x-extension-upload-token"];
   if (!token) {
-    res.status(401).send({ error: "Missing upload token" });
+    res.status(401).send({error: "Missing upload token"});
     return;
   }
 
@@ -38,14 +38,14 @@ app.post("/rawWorkout/garmin", async (req, res) => {
     .where("extensionUploadToken", "==", token)
     .get();
   if (dbres.size !== 1) {
-    res.status(401).send({ error: "Token not valid" });
+    res.status(401).send({error: "Token not valid"});
     return;
   }
 
   const userId = (await dbres.docs[0].ref.parent.parent?.get())?.id;
 
   if (!userId) {
-    res.status(401).send({ error: "Token not valid" });
+    res.status(401).send({error: "Token not valid"});
     return;
   }
 
@@ -63,7 +63,7 @@ app.post("/rawWorkout/garmin", async (req, res) => {
     );
   });
   bw.close();
-  res.send({ status: "ok" });
+  res.send({status: "ok"});
 });
 
 exports.app = onRequest(app);
