@@ -12,9 +12,12 @@ import * as logger from "firebase-functions/logger";
 import * as express from "express";
 
 import { initializeApp } from "firebase-admin/app";
-// import {getFirestore} from "firebase-admin/firestore";
+import { getFirestore } from "firebase-admin/firestore";
+import { GarminActivity } from "./models/garmin";
 
 initializeApp();
+
+const fadb = getFirestore();
 
 // REST API
 
@@ -26,5 +29,61 @@ app.get("/", (req, res) => {
   res.status(200).send("Hey there! We're now using express!");
 });
 
-app.post("/rawWorkout/garmin", (req, res) => {});
+app.post("/rawWorkout/garmin", async (req, res) => {
+  const token = req.headers["x-extension-upload-token"];
+  if (!token) {
+    res.status(401).send({ error: "Missing upload token" });
+    return;
+  }
+  const dbres = await fadb
+    .collectionGroup("accessTokens")
+    .where("extensionUploadToken", "==", token)
+    .get();
+  if (dbres.size !== 1) {
+    res.status(401).send({ error: "Token not valid" });
+    return;
+  }
+
+  const userId = (await dbres.docs[0].ref.parent.parent?.get())?.id;
+
+  if (!userId) {
+    res.status(401).send({ error: "Token not valid" });
+    return;
+  }
+
+  const bw = fadb.bulkWriter();
+
+  (req.body as GarminUploadRequestBody).activities.forEach((a) => {
+    bw.set(
+      fadb
+        .collection("users")
+        .doc(userId)
+        .collection("rawWorkouts")
+        .doc(`garmin_${a.activityId}`),
+      a,
+    );
+  });
+  bw.close();
+  res.send({ status: "ok" });
+});
+
+app.post("/dummy-create-user-with-auth-token", (req, res) => {
+  const d = req.body as DummyUserCreateRequest;
+
+  fadb.doc(`users/${d.userId}/accessTokens/accessTokens`).create({
+    extensionUploadToken: d.extensionUploadToken,
+  });
+
+  res.send({ status: "ok" });
+});
+
+type DummyUserCreateRequest = {
+  userId: string;
+  extensionUploadToken: string;
+};
+
 exports.app = onRequest(app);
+
+type GarminUploadRequestBody = {
+  activities: GarminActivity[];
+};
