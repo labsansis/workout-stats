@@ -15,6 +15,9 @@ import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { GarminActivity } from "./models/garmin";
 
+import { onDocumentWritten } from "firebase-functions/v2/firestore";
+import { parseGarminActivity } from "./common/parseGarmin";
+
 initializeApp();
 
 const fadb = getFirestore();
@@ -87,3 +90,30 @@ exports.app = onRequest(app);
 type GarminUploadRequestBody = {
   activities: GarminActivity[];
 };
+
+// Firebase Event Triggered Functions
+
+exports.parseRawWorkout = onDocumentWritten(
+  "/users/{userId}/rawWorkouts/{rawWorkoutId}",
+  (event) => {
+    const original = event.data?.after.data();
+
+    if (!original) {
+      // This might mean that the document has been deleted. Currently the
+      // system does not support deletions, so just ignoring it here.
+      return;
+    }
+
+    const parsed = parseGarminActivity(original as GarminActivity);
+
+    const userId = event.params.userId;
+    const rawWorkoutId = event.params.rawWorkoutId;
+
+    if (!parsed) {
+      logger.error("Could not parse workout", { userId, rawWorkoutId });
+      return;
+    }
+
+    fadb.doc(`users/${userId}/workouts/${rawWorkoutId}`).create(parsed);
+  },
+);
