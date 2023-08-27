@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { ReactElement, useRef, useState } from "react";
 import { ExerciseSet } from "../../models/workout";
 import { WSTable } from "../WSTable/WSTable";
 import dateFormat from "dateformat";
@@ -34,10 +34,29 @@ export function ExercisesSummary() {
     }
   }
 
-  const getExercisePR = (key: string): number => {
-    return setsByExercise[key]
-      .map((es) => Math.max(es.weight || 0, 0))
-      .reduce((weight1, weight2) => Math.max(weight1, weight2));
+  const getExercisePR = (key: string): ReactElement => {
+    const { weight, reps } = setsByExercise[key]
+      .map((es) => {
+        return { weight: es.weight || 0, reps: es.repetitionCount || 0 };
+      })
+      .reduce((a, b) => {
+        return {
+          weight: Math.max(a.weight, b.weight),
+          reps: Math.max(a.reps, b.reps),
+        };
+      });
+    if (weight > 0) {
+      return (
+        <>
+          {weight} <span className="text-gray-400">kg</span>
+        </>
+      );
+    }
+    return (
+      <>
+        {reps} <span className="text-gray-400">reps</span>
+      </>
+    );
   };
 
   const getLatestDate = (key: string): Date => {
@@ -51,42 +70,48 @@ export function ExercisesSummary() {
    * `dates` is a list of strings in the shape "01 Jan 2022", all unique and sorted in ascending order.
    * `weights` is the highest weight of that day corresponding to every element of `dates`.
    */
-  const extractExerciseWeightSeries = (
+  const extractExercisePRSeries = (
     exerciseKey: string,
-  ): { dates: string[]; weights: number[] } => {
-    const weightByDay: { [day: string]: { weight: number; date: Date } } = {};
+  ): { dates: string[]; prs: number[]; metricKey: string } => {
+    const prByDay: {
+      [day: string]: { weight: number; reps: number; date: Date };
+    } = {};
     for (let es of setsByExercise[exerciseKey]) {
       let ds = dateFormat(es.workoutStartTime, "dd mmm yyyy");
-      weightByDay[ds] = {
-        weight: Math.max(weightByDay[ds]?.weight || 0, es.weight || 0),
+
+      prByDay[ds] = {
+        weight: Math.max(prByDay[ds]?.weight || 0, es.weight || 0),
+        reps: Math.max(prByDay[ds]?.reps || 0, es.repetitionCount || 0),
         date: es.workoutStartTime,
       };
     }
 
-    const dayDateWeight = Object.keys(weightByDay).map((day) => {
+    const dayDatePR = Object.keys(prByDay).map((day) => {
       return {
         day,
-        date: weightByDay[day].date,
-        weight: weightByDay[day].weight,
+        date: prByDay[day].date,
+        weight: prByDay[day].weight,
+        reps: prByDay[day].reps,
       };
     });
-    dayDateWeight.sort((a, b) =>
-      a.date > b.date ? 1 : a.date < b.date ? -1 : 0,
-    );
+    dayDatePR.sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0));
     // what we called "day" before interally now becomes "date" for external use
-    const dates = dayDateWeight.map((ddw) => ddw.day);
-    const weights = dayDateWeight.map((ddw) => ddw.weight);
-    return { dates, weights };
+    const dates = dayDatePR.map((ddw) => ddw.day);
+    const weights = dayDatePR.map((ddw) => ddw.weight);
+    const reps = dayDatePR.map((ddw) => ddw.reps);
+    const metricKey = Math.max(...weights) > 0 ? "kg" : "reps";
+    const prs = Math.max(...weights) > 0 ? weights : reps;
+    return { dates, prs, metricKey };
   };
 
   const prepChartProps = (exerciseKey: string): ApexChartProps => {
-    let { dates, weights } = extractExerciseWeightSeries(exerciseKey);
+    let { dates, prs, metricKey } = extractExercisePRSeries(exerciseKey);
     return {
       type: "line",
       series: [
         {
           name: setsByExercise[exerciseKey][0].exercise.displayName,
-          data: weights,
+          data: prs,
         },
       ],
       options: {
@@ -100,7 +125,7 @@ export function ExercisesSummary() {
         },
         yaxis: {
           title: {
-            text: "Weight (kg)",
+            text: metricKey === "kg" ? "Weight (kg)" : "Reps",
           },
         },
         markers: {
@@ -146,3 +171,7 @@ export function ExercisesSummary() {
 }
 
 type ExerciseSetWithWorkoutStartTime = ExerciseSet & { workoutStartTime: Date };
+enum MetricType {
+  WEIGHT,
+  REPS,
+}
