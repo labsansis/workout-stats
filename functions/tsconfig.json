@@ -7,7 +7,8 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true
   },
   "compileOnSave": true,
   "include": ["src"]

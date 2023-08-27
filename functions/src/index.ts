@@ -15,17 +15,13 @@ import * as express from "express";
 import {initializeApp} from "firebase-admin/app";
 import {credential as fbsCredential} from "firebase-admin";
 import {getFirestore} from "firebase-admin/firestore";
-// import {GarminActivity} from "./models/garmin";
+import {GarminActivity} from "./models/garmin";
+import * as serviceAccount from "./serviceAccount.json";
 
 setGlobalOptions({maxInstances: 10});
+
 initializeApp({
-  credential: fbsCredential.cert({
-    projectId: "workoutstats-b571c",
-    clientEmail:
-      "",
-    privateKey:
-      "",
-  }),
+  credential: fbsCredential.cert(serviceAccount),
 });
 
 const fadb = getFirestore();
@@ -97,6 +93,6 @@ app.post("/rawWorkout/garmin", async (req, res) => {
 
 exports.app = onRequest(app);
 
-// type GarminUploadRequestBody = {
-//   activities: GarminActivity[];
-// };
+type GarminUploadRequestBody = {
+  activities: GarminActivity[];
+};
