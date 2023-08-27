@@ -4,7 +4,7 @@
 
 import {onRequest} from "firebase-functions/v2/https";
 import {setGlobalOptions} from "firebase-functions/v2";
-import * as logger from "firebase-functions/logger";
+// import * as logger from "firebase-functions/logger";
 import * as express from "express";
 
 import {initializeApp} from "firebase-admin/app";
@@ -25,24 +25,6 @@ const fadb = getFirestore();
 
 const app = express();
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("oki dokes");
-});
-
-app.get("/again", (req, res) => {
-  res.send("oki dokes again");
-});
-
-app.get("/create", async (req, res) => {
-  const wr = await fadb
-    .collection("dummyRecords")
-    .doc(String(Math.floor(Math.random() * 1000)))
-    .create({hello: "world"});
-  logger.info("WRITE RESULT");
-  logger.info(wr);
-  res.send("created");
-});
 
 app.post("/rawWorkout/garmin", async (req, res) => {
   // retrieve the upload token from the header
