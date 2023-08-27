@@ -18,14 +18,19 @@ export function ExercisesSummary() {
     if (plotRef.current) plotRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const setsByExercise: { [exerciseName: string]: ExerciseSet[] } = {};
+  const setsByExercise: {
+    [exerciseName: string]: ExerciseSetWithWorkoutStartTime[];
+  } = {};
   for (let w of workouts) {
     if (!w.exerciseSets) continue;
     for (let es of w.exerciseSets) {
       if (!(es.exercise.name in setsByExercise)) {
         setsByExercise[es.exercise.name] = [];
       }
-      setsByExercise[es.exercise.name].push(es);
+      setsByExercise[es.exercise.name].push({
+        ...es,
+        workoutStartTime: w.startTime,
+      });
     }
   }
 
@@ -51,10 +56,10 @@ export function ExercisesSummary() {
   ): { dates: string[]; weights: number[] } => {
     const weightByDay: { [day: string]: { weight: number; date: Date } } = {};
     for (let es of setsByExercise[exerciseKey]) {
-      let ds = dateFormat(es.startTime, "dd mmm yyyy");
+      let ds = dateFormat(es.workoutStartTime, "dd mmm yyyy");
       weightByDay[ds] = {
         weight: Math.max(weightByDay[ds]?.weight || 0, es.weight || 0),
-        date: es.startTime,
+        date: es.workoutStartTime,
       };
     }
 
@@ -139,3 +144,5 @@ export function ExercisesSummary() {
     </>
   );
 }
+
+type ExerciseSetWithWorkoutStartTime = ExerciseSet & { workoutStartTime: Date };
