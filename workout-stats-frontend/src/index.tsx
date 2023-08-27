@@ -31,6 +31,10 @@ const router = createBrowserRouter([
     element: <Dashboard page="exercises" />,
   },
   {
+    path: "account",
+    element: <Dashboard page="account" />,
+  },
+  {
     path: "upload",
     element: <Dashboard page="upload" />,
   },

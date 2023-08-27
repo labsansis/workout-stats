@@ -11,7 +11,7 @@ import { MdSportsGymnastics } from "react-icons/md";
 import { GiMuscleUp } from "react-icons/gi";
 import { IconType } from "react-icons";
 import { GoUpload } from "react-icons/go";
-import { RiLogoutBoxRLine } from "react-icons/ri";
+import { RiLogoutBoxRLine, RiAccountCircleLine } from "react-icons/ri";
 
 const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,6 +76,9 @@ const SideMenu = () => {
           Training Volume
         </MenuLink>
         <div className="menu-user-line">{getUserDisplayName()}</div>
+        <MenuLink to="/account" icon={RiAccountCircleLine}>
+          Account
+        </MenuLink>
         <MenuLink to="/upload" icon={GoUpload}>
           Upload files
         </MenuLink>
