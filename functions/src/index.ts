@@ -1,9 +1,4 @@
 /**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
@@ -67,7 +62,7 @@ app.post("/rawWorkout/garmin", async (req, res) => {
     return;
   }
 
-  const userId = (await dbres.docs[0].ref.parent.parent?.get())?.id;
+  const userId = dbres.docs[0].id;
 
   if (!userId) {
     res.status(401).send({error: "Token not valid"});
