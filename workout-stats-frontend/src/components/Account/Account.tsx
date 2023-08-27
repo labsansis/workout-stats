@@ -33,9 +33,7 @@ function UploadKey() {
 
   const fetchUploadKey = async () => {
     if (!user) return;
-    const docsnap = await getDoc(
-      doc(db, "users", user.id, "accessTokens", "accessTokens"),
-    );
+    const docsnap = await getDoc(doc(db, "userSensitiveData", user.id));
     const uats = docsnap.data() as UserAccessTokens;
     return uats?.extensionUploadToken;
   };
@@ -43,7 +41,7 @@ function UploadKey() {
   const genUploadKey = async () => {
     if (!user) return null;
     const newUploadKey = uuidv4().replace(/-/g, "");
-    await setDoc(doc(db, "users", user.id, "accessTokens", "accessTokens"), {
+    await setDoc(doc(db, "userSensitiveData", user.id), {
       extensionUploadToken: newUploadKey,
     });
     return newUploadKey;
