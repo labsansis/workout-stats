@@ -10,10 +10,27 @@ Currently all backend is configured manually via the Firebase console.
 
 ## Running
 
-Running `npm install` and `npm start` should start the front end locally.
+Run `npm install` to install all dependencies.
 
-Note that it will by default talk to the prod backend, so be careful with
-what data you upload etc.
+Running everything locally requires running local emulators for Firebase services
+such as Firestore, Auth etc. The emulation is configured in the `functions`
+directory. First install Firebase CLI with
+
+`npm i -g firebase`
+
+then install the required deps in the `functions` dir:
+
+```
+cd ../functions
+npm install
+```
+
+Now you should be set up to actually run the emulators. To do so, from this
+(`workout-stats-frontend`) dir run
+
+`npm run emulate`
+
+To run the actual front end code, run `npm start`.
 
 ## Data model
 
