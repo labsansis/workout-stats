@@ -4,7 +4,7 @@
 
 import {onRequest} from "firebase-functions/v2/https";
 import {setGlobalOptions} from "firebase-functions/v2";
-// import * as logger from "firebase-functions/logger";
+import * as logger from "firebase-functions/logger";
 import * as express from "express";
 
 import {initializeApp} from "firebase-admin/app";
@@ -12,6 +12,7 @@ import {credential as fbsCredential} from "firebase-admin";
 import {getFirestore} from "firebase-admin/firestore";
 import {GarminActivity} from "./models/garmin";
 import * as serviceAccount from "./serviceAccount.json";
+import * as cors from "cors";
 
 setGlobalOptions({maxInstances: 10});
 
@@ -25,6 +26,7 @@ const fadb = getFirestore();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.post("/rawWorkout/garmin", async (req, res) => {
   // retrieve the upload token from the header
@@ -33,6 +35,10 @@ app.post("/rawWorkout/garmin", async (req, res) => {
     res.status(401).send({error: "Missing upload token"});
     return;
   }
+
+  logger.info("BODY");
+  logger.info(JSON.stringify(req.body));
+
 
   // find the corresponding user id
   const dbres = await fadb
