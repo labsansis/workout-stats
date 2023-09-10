@@ -9,6 +9,8 @@ import PillSelect from "../PillSelect/PillSelect";
 import { CardGrid } from "../cards/CardGrid";
 import AnimatedNumber from "../AnimatedNumber/AnimatedNumber";
 import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
+import { saveInputChangeInHookState } from "../../common/functions";
+import Toggle from "../Toggle/Toggle";
 
 export default function TrainingVolume() {
   const workouts = useRecoilValue(strengthWorkoutsState);
@@ -18,6 +20,8 @@ export default function TrainingVolume() {
   const [groupingLevel, setGroupingLevel] = useState("coarse");
   const [volumeType, setVolumeType] = useState("sets");
   const [chartHeight, setChartHeight] = useState("auto");
+  const [showTargetSetsLine, setShowTargetSetsLine] = useState(false);
+  const [targetSets, setTargetSets] = useState(10);
   const chartParentRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -125,6 +129,28 @@ export default function TrainingVolume() {
     return res;
   };
 
+  const genTargetSetsAnnotation = () => {
+    if (!showTargetSetsLine || volumeType != "sets") return {};
+    const earliestTimestamp =
+      earliestDate.getTime() ||
+      Math.min(...workouts.map((w) => w.startTime.getTime()));
+    const numWeeks =
+      (new Date().getTime() - earliestTimestamp) / (1000 * 3600 * 24 * 7);
+    const lineValue = Math.round(targetSets * numWeeks);
+
+    return {
+      y: lineValue,
+      borderColor: "#7500e3",
+      label: {
+        borderColor: "#7500e3",
+        style: {
+          color: "#fff",
+          background: "#7500e3",
+        },
+        text: "Target sets",
+      },
+    };
+  };
   const volumePerMuscle = extractVolumePerMuscle(groupSetsByPrimaryMuscle());
   const keys =
     groupingLevel === "coarse" ? coarseMuscleGroups : granuralMuscleGroups;
@@ -149,6 +175,9 @@ export default function TrainingVolume() {
           title: {
             text: yAxisTitle,
           },
+        },
+        annotations: {
+          yaxis: [genTargetSetsAnnotation()],
         },
       },
       height: chartHeight,
@@ -207,6 +236,21 @@ export default function TrainingVolume() {
           },
         ]}
       />
+      <div className="inline-block p-4 my-4 rounded-xl border-[1px] border-slate-300">
+        <Toggle
+          handleChange={setShowTargetSetsLine}
+          default={false}
+          label="Show target sets at"
+        />
+        <input
+          type="number"
+          size={3}
+          value={targetSets}
+          onChange={saveInputChangeInHookState(setTargetSets)}
+          className="mx-2 px-1 border-b-2 border-b-cyan-800"
+        />
+        sets per muscle group per week.
+      </div>
       <div className="mt-10 w-full xl:w-3/5" ref={chartParentRef}>
         <Chart {...prepChartProps()} />
       </div>
