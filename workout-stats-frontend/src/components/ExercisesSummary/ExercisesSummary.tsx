@@ -107,7 +107,10 @@ export function ExercisesSummary() {
   /**
    * Scans through all sets of the given exercise and produces a series at daily granularity.
    * `dates` is a list of strings in the shape "01 Jan 2022", all unique and sorted in ascending order.
-   * `weights` is the highest weight of that day corresponding to every element of `dates`.
+   * `volumes` is the total volume of that exercise in that day corresponding to every element of `dates`.
+   * `metricKey` is either "kg" indicating that the volume is given in terms of total weight
+   *             lifted, or "reps" indicating that the volume is given in terms of total reps
+   *             done (for bodyweight exercises).
    */
   const extractExerciseVolumeSeries = (
     exerciseKey: string,
