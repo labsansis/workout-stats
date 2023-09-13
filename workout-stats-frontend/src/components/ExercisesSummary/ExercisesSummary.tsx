@@ -104,30 +104,83 @@ export function ExercisesSummary() {
     return { dates, prs, metricKey };
   };
 
+  /**
+   * Scans through all sets of the given exercise and produces a series at daily granularity.
+   * `dates` is a list of strings in the shape "01 Jan 2022", all unique and sorted in ascending order.
+   * `weights` is the highest weight of that day corresponding to every element of `dates`.
+   */
+  const extractExerciseVolumeSeries = (
+    exerciseKey: string,
+  ): { dates: string[]; volumes: number[]; metricKey: string } => {
+    const volByDay: {
+      [day: string]: { volume: number; reps: number; date: Date };
+    } = {};
+    for (let es of setsByExercise[exerciseKey]) {
+      let ds = dateFormat(es.workoutStartTime, "dd mmm yyyy");
+
+      volByDay[ds] = {
+        volume:
+          (volByDay[ds]?.volume || 0) + (es.weight || 0) * es.repetitionCount,
+        reps: (volByDay[ds]?.reps || 0) + es.repetitionCount,
+        date: es.workoutStartTime,
+      };
+    }
+
+    const dayDateVol = Object.keys(volByDay).map((day) => {
+      return {
+        day,
+        date: volByDay[day].date,
+        volume: volByDay[day].volume,
+        reps: volByDay[day].reps,
+      };
+    });
+    dayDateVol.sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0));
+    // what we called "day" before interally now becomes "date" for external use
+    const dates = dayDateVol.map((ddw) => ddw.day);
+    const volumes = dayDateVol.map((ddw) => ddw.volume);
+    const reps = dayDateVol.map((ddw) => ddw.reps);
+    const metricKey = Math.max(...volumes) > 0 ? "kg" : "reps";
+    const rvs = metricKey == "kg" ? volumes : reps;
+    return { dates, volumes: rvs, metricKey };
+  };
+
   const prepChartProps = (exerciseKey: string): ApexChartProps => {
-    let { dates, prs, metricKey } = extractExercisePRSeries(exerciseKey);
+    const { dates, prs, metricKey } = extractExercisePRSeries(exerciseKey);
+    const volSeries = extractExerciseVolumeSeries(exerciseKey);
     return {
       type: "line",
       series: [
         {
-          name: setsByExercise[exerciseKey][0].exercise.displayName,
+          name: metricKey === "kg" ? "Max weight" : "Max reps",
           data: prs,
+        },
+        {
+          name: metricKey === "kg" ? "Volume" : "Total reps",
+          data: volSeries.volumes,
         },
       ],
       options: {
         title: {
           text: setsByExercise[exerciseKey][0].exercise.displayName,
         },
-        colors: ["#155D75"],
+        colors: ["#155D75", "#ff6600"],
         labels: dates,
         xaxis: {
           type: "datetime",
         },
-        yaxis: {
-          title: {
-            text: metricKey === "kg" ? "Weight (kg)" : "Reps",
+        yaxis: [
+          {
+            title: {
+              text: metricKey === "kg" ? "Weight (kg)" : "Reps (for max)",
+            },
           },
-        },
+          {
+            opposite: true,
+            title: {
+              text: metricKey === "kg" ? "Volume (kg)" : "Reps (for total)",
+            },
+          },
+        ],
         markers: {
           size: 2,
         },
