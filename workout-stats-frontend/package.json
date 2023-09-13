@@ -34,7 +34,7 @@
   "scripts": {
     "start": "cp src/firebase-local.js src/firebase.js && react-scripts start",
     "start-point-to-prod": "cp src/firebase-prod.js src/firebase.js && react-scripts start",
-    "build": "react-scripts build",
+    "build": "cp src/firebase-prod.js src/firebase.js && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier -w .",
