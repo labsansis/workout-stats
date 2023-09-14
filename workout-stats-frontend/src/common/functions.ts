@@ -7,11 +7,16 @@ export const formatDuration = (duration: number): string => {
 };
 
 export function saveInputChangeInHookState(setStateFn: CallableFunction) {
-  return (event: {
-    target: { type: string; checked: boolean; value: string };
-  }) => {
+  return (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
+    const value =
+      target.type === "checkbox"
+        ? (target as HTMLInputElement).checked
+        : target.value;
     setStateFn(value);
   };
 }
