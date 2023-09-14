@@ -23,6 +23,7 @@ function MonthCalendar({
   year,
   weekStartDay,
   showMonthTitle,
+  events,
 }: MonthCalendarProps) {
   const daysInMonth = (() => {
     if (month === 1) {
@@ -47,16 +48,23 @@ function MonthCalendar({
     // shift this padding number accordingly.
     const numBlanks = (new Date(year, month).getDay() + 7 - weekStartDay) % 7;
 
-    for (let i = 0; i < numBlanks; i++) tmpDays.push({ text: "" });
+    for (let i = 0; i < numBlanks; i++) tmpDays.push({ dayNumber: 0 });
 
-    for (let i = 1; i <= daysInMonth; i++) tmpDays.push({ text: i.toString() });
+    for (let i = 1; i <= daysInMonth; i++) tmpDays.push({ dayNumber: i });
     setDays(tmpDays);
   }, [year, month]);
+
+  const isToday = (day: number) => {
+    const d = new Date();
+    return (
+      d.getFullYear() === year && d.getMonth() === month && d.getDate() === day
+    );
+  };
 
   return (
     <div className="p-1 m-1 font-sans bg-white rounded shadow-md min-w-[200px]">
       {showMonthTitle && (
-        <p className="p-1 text-lg text-center text-indigo-800">
+        <p className="p-1 text-lg text-center text-slate-800">
           {monthNames[month]}
         </p>
       )}
@@ -72,11 +80,25 @@ function MonthCalendar({
           ))}
         </div>
         <div className="grid grid-cols-7 gap-1 font-semibold text-center text-gray-800 ">
-          {days.map((day, idx) => (
-            <div key={`day-${year}-${month}-${idx}`}>
-              <p>{day.text}</p>
-            </div>
-          ))}
+          {days.map((day, idx) => {
+            const eventDayKey = `${year}-${month}-${day.dayNumber}`;
+            const hasOneEvent = (events.get(eventDayKey)?.length || 0) === 1;
+            const hasManyEvents = (events.get(eventDayKey)?.length || 0) > 1;
+
+            let circleClassName =
+              "absolute w-[1.7em] h-[1.7em] left-0 right-0 top-0 bottom-0 m-auto rounded-full";
+            if (hasOneEvent) circleClassName += " bg-lime-300";
+            if (hasManyEvents) circleClassName += " bg-fuchsia-500";
+            // -1 because dayNumber is 1-indexed
+            if (isToday(day.dayNumber - 1))
+              circleClassName += " border-2 border-red-700";
+            return (
+              <div key={`day-${year}-${month}-${idx}`} className="relative">
+                <div className={circleClassName}></div>
+                <p className="relative z-10">{day.dayNumber || ""}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -84,7 +106,7 @@ function MonthCalendar({
 }
 
 type Day = {
-  text: string;
+  dayNumber: number;
 };
 
 type MonthCalendarProps = {
@@ -93,11 +115,33 @@ type MonthCalendarProps = {
   year: number;
   month: number;
   showMonthTitle: boolean;
+  events: Map<string, CalendarEvent[]>;
 };
 
-export default function YearCalendar({ weekStartDay }: YearCalendarProps) {
+export default function YearCalendar({
+  weekStartDay,
+  events,
+}: YearCalendarProps) {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
+  const [eventsMap, setEventsMap] = useState(
+    new Map<string, CalendarEvent[]>(),
+  );
+
+  useEffect(() => {
+    console.log(events);
+    const tmpMap = new Map<string, CalendarEvent[]>();
+
+    for (let event of events) {
+      const dstr = `${event.date.getFullYear()}-${event.date.getMonth()}-${event.date.getDate()}`;
+      if (!tmpMap.has(dstr)) {
+        tmpMap.set(dstr, []);
+      }
+      tmpMap.get(dstr)?.push(event);
+    }
+
+    setEventsMap(tmpMap);
+  }, []);
 
   const yearFwd = () => setYear(year + 1);
   const yearBack = () => setYear(year - 1);
@@ -142,6 +186,7 @@ export default function YearCalendar({ weekStartDay }: YearCalendarProps) {
               year={year}
               weekStartDay={weekStartDay}
               showMonthTitle={false}
+              events={eventsMap}
             />
           )}
           {full &&
@@ -152,6 +197,7 @@ export default function YearCalendar({ weekStartDay }: YearCalendarProps) {
                 year={year}
                 weekStartDay={weekStartDay}
                 showMonthTitle={true}
+                events={eventsMap}
               />
             ))}
         </div>
@@ -167,7 +213,14 @@ export default function YearCalendar({ weekStartDay }: YearCalendarProps) {
   );
 }
 
+type CalendarEvent = {
+  date: Date;
+  name: string;
+  link?: string;
+};
+
 type YearCalendarProps = {
   // 0 = sunday, 1 = monday, ...
   weekStartDay: number;
+  events: CalendarEvent[];
 };

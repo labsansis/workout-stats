@@ -73,7 +73,15 @@ export function Home() {
         ]}
       />
 
-      <YearCalendar weekStartDay={1} />
+      <YearCalendar
+        weekStartDay={1}
+        events={strengthWorkouts.map((w) => {
+          return {
+            date: w.startTime,
+            name: w.name,
+          };
+        })}
+      />
     </>
   );
 }
