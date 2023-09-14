@@ -8,6 +8,7 @@ import { Dashboard } from "./components/Dashboard/Dashboard";
 import { RecoilRoot } from "recoil";
 import SignOut from "./components/userAuth/SignOut";
 import UserAuthPage from "./components/userAuth/UserAuthPage";
+import Feedback from "./components/Feedback/Feedback";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -60,6 +61,7 @@ root.render(
   <React.StrictMode>
     <RecoilRoot>
       <RouterProvider router={router} />
+      <Feedback />
     </RecoilRoot>
   </React.StrictMode>,
 );
