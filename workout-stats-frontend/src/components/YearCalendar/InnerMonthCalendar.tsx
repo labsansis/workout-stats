@@ -42,13 +42,6 @@ export default function InnerMonthCalendar({
     setDays(tmpDays);
   }, [year, month]);
 
-  const isToday = (day: number) => {
-    const d = new Date();
-    return (
-      d.getFullYear() === year && d.getMonth() === month && d.getDate() === day
-    );
-  };
-
   return (
     <div className="p-1 m-1 font-sans bg-white rounded shadow-md min-w-[200px]">
       {showMonthTitle && (
@@ -69,21 +62,19 @@ export default function InnerMonthCalendar({
         </div>
         <div className="grid grid-cols-7 gap-1 font-semibold text-center text-gray-800 ">
           {days.map((day, idx) => {
-            const eventDayKey = `${year}-${month}-${day.dayNumber}`;
+  
+  const eventDayKey = `${year}-${month}-${day.dayNumber}`;
             const dayEvents = events.get(eventDayKey) || [];
 
-            let circleClassName =
-              "absolute w-[1.7em] h-[1.7em] left-0 right-0 top-0 bottom-0 m-auto rounded-full";
-            const shade = shadingFn && shadingFn(dayEvents);
-            let cirlceStyle = {};
-            if (shade) cirlceStyle = { backgroundColor: shade };
-            if (isToday(day.dayNumber))
-              circleClassName += " border-2 border-red-700";
             return (
-              <div key={`day-${year}-${month}-${idx}`} className="relative">
-                <div className={circleClassName} style={cirlceStyle}></div>
-                <p className="relative z-10">{day.dayNumber || ""}</p>
-              </div>
+              <DayComponent
+                key={`day-${year}-${month}-${idx}`}
+                shadingFn={shadingFn}
+                dayEvents={dayEvents}
+                year={year}
+                month={month}
+                dayNumber={day.dayNumber}
+              />
             );
           })}
         </div>
@@ -103,5 +94,62 @@ type MonthCalendarProps = {
   month: number;
   showMonthTitle: boolean;
   events: Map<string, CalendarEvent[]>;
+  shadingFn?: (dayEvents: CalendarEvent[]) => string | undefined;
+};
+
+function DayComponent({
+  dayNumber,
+  shadingFn,
+  dayEvents,
+  year,
+  month,
+}: DayComponentProps) {
+    const [referenceElement, setReferenceElement] = useState<HTMLParagraphElement | null>(null);
+    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
+    const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
+    const { styles, attributes } = usePopper(referenceElement, popperElement, {
+      modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
+    });    
+    const [daySummaryOpen, setDaySummaryOpen] = useState(false);
+
+    const isToday = (day: number) => {
+    const d = new Date();
+    return (
+      d.getFullYear() === year && d.getMonth() === month && d.getDate() === day
+    );
+  };
+
+  const handleDateClick = (e: MouseEvent)  => {
+    e.preventDefault();
+    if (!dayNumber) return;
+
+    e.preventDefault()
+
+    
+  }
+
+  let circleClassName =
+    "absolute w-[1.7em] h-[1.7em] left-0 right-0 top-0 bottom-0 m-auto rounded-full";
+  const shade = shadingFn && shadingFn(dayEvents);
+  let cirlceStyle = {};
+  if (shade) cirlceStyle = { backgroundColor: shade };
+  if (isToday(dayNumber)) circleClassName += " border-2 border-red-700";
+  return (
+    <div className="relative">
+      <div className={circleClassName} style={cirlceStyle}></div>
+      <p className="relative z-10 cursor-pointer" ref={setReferenceElement}>{dayNumber || ""}</p>
+
+      <div ref={setPopperElement} style={styles.popper} {...attributes.popper} >
+        Popper element
+        <div ref={setArrowElement} style={styles.arrow} />
+      </div>    </div>
+  );
+}
+
+type DayComponentProps = {
+  year: number;
+  month: number;
+  dayNumber: number;
+  dayEvents: CalendarEvent[];
   shadingFn?: (dayEvents: CalendarEvent[]) => string | undefined;
 };
