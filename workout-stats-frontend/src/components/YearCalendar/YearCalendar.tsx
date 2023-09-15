@@ -90,8 +90,7 @@ function MonthCalendar({
             const shade = shadingFn && shadingFn(dayEvents);
             let cirlceStyle = {};
             if (shade) cirlceStyle = { backgroundColor: shade };
-            // -1 because dayNumber is 1-indexed
-            if (isToday(day.dayNumber - 1))
+            if (isToday(day.dayNumber))
               circleClassName += " border-2 border-red-700";
             return (
               <div key={`day-${year}-${month}-${idx}`} className="relative">
