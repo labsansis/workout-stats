@@ -24,6 +24,7 @@ function MonthCalendar({
   weekStartDay,
   showMonthTitle,
   events,
+  shadingFn,
 }: MonthCalendarProps) {
   const daysInMonth = (() => {
     if (month === 1) {
@@ -82,19 +83,19 @@ function MonthCalendar({
         <div className="grid grid-cols-7 gap-1 font-semibold text-center text-gray-800 ">
           {days.map((day, idx) => {
             const eventDayKey = `${year}-${month}-${day.dayNumber}`;
-            const hasOneEvent = (events.get(eventDayKey)?.length || 0) === 1;
-            const hasManyEvents = (events.get(eventDayKey)?.length || 0) > 1;
 
             let circleClassName =
               "absolute w-[1.7em] h-[1.7em] left-0 right-0 top-0 bottom-0 m-auto rounded-full";
-            if (hasOneEvent) circleClassName += " bg-lime-300";
-            if (hasManyEvents) circleClassName += " bg-fuchsia-500";
+            const dayEvents = events.get(eventDayKey) || [];
+            const shade = shadingFn && shadingFn(dayEvents);
+            let cirlceStyle = {};
+            if (shade) cirlceStyle = { backgroundColor: shade };
             // -1 because dayNumber is 1-indexed
             if (isToday(day.dayNumber - 1))
               circleClassName += " border-2 border-red-700";
             return (
               <div key={`day-${year}-${month}-${idx}`} className="relative">
-                <div className={circleClassName}></div>
+                <div className={circleClassName} style={cirlceStyle}></div>
                 <p className="relative z-10">{day.dayNumber || ""}</p>
               </div>
             );
@@ -116,11 +117,87 @@ type MonthCalendarProps = {
   month: number;
   showMonthTitle: boolean;
   events: Map<string, CalendarEvent[]>;
+  shadingFn?: (dayEvents: CalendarEvent[]) => string | undefined;
+};
+
+function InnerYearCalendar({
+  year,
+  month,
+  showFullYear,
+  forwardFn,
+  backFn,
+  events,
+  shadingFn,
+  weekStartDay,
+}: InnerYearCalendarProps) {
+  const title = showFullYear
+    ? year
+    : `${monthNames[month].substring(0, 3)} ${year}`;
+  return (
+    <div>
+      <div className="flex justify-between text-white bg-cyan-800 rounded-t-md min-w-[200px]">
+        <div className="cursor-pointer p-2 w-[30%] pt-[0.9em]" onClick={backFn}>
+          <div className="mx-auto w-[1em]">
+            <IoIosArrowBack />
+          </div>
+        </div>
+        <div className="text-xl p-2">{title}</div>
+        <div
+          className="cursor-pointer p-2 w-[30%] pt-[0.9em]"
+          onClick={forwardFn}
+        >
+          <div className="mx-auto w-[1em]">
+            <IoIosArrowForward />
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 border-2 border-cyan-800 rounded-b-md min-w-[200px]">
+        {!showFullYear && (
+          <MonthCalendar
+            month={month}
+            year={year}
+            weekStartDay={weekStartDay}
+            showMonthTitle={false}
+            events={events}
+            shadingFn={shadingFn}
+          />
+        )}
+        {showFullYear &&
+          [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((month) => (
+            <MonthCalendar
+              key={`month-calendar-${month}`}
+              month={month}
+              year={year}
+              weekStartDay={weekStartDay}
+              showMonthTitle={true}
+              events={events}
+              shadingFn={shadingFn}
+            />
+          ))}
+      </div>
+    </div>
+  );
+}
+
+type InnerYearCalendarProps = {
+  showFullYear: boolean;
+  year: number;
+  month: number;
+  forwardFn: () => void;
+  backFn: () => void;
+  events: Map<string, CalendarEvent[]>;
+  // 0 = sunday, 1 = monday, ...
+  weekStartDay: number;
+  shadingFn?: (dayEvents: CalendarEvent[]) => string | undefined;
 };
 
 export default function YearCalendar({
   weekStartDay,
   events,
+  shadingFn,
+  view = "responsive",
+  labels,
+  className,
 }: YearCalendarProps) {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
@@ -129,7 +206,6 @@ export default function YearCalendar({
   );
 
   useEffect(() => {
-    console.log(events);
     const tmpMap = new Map<string, CalendarEvent[]>();
 
     for (let event of events) {
@@ -153,63 +229,57 @@ export default function YearCalendar({
     if (month == 0) yearBack();
     setMonth((month + 12 - 1) % 12);
   };
-  const renderCalendar = (full: boolean) => {
-    const forwardFn = full ? yearFwd : monthFwd;
-    const backFn = full ? yearBack : monthBack;
-    const title = (!full ? `${monthNames[month]} ` : "") + year;
 
-    return (
-      <div className={full ? "hidden md:block" : "block md:hidden"}>
-        <div className="flex justify-between text-white bg-cyan-800 rounded-t-md min-w-[200px]">
-          <div
-            className="cursor-pointer p-2 w-[30%] pt-[0.9em]"
-            onClick={backFn}
-          >
-            <div className="mx-auto w-[1em]">
-              <IoIosArrowBack />
-            </div>
-          </div>
-          <div className="text-xl p-2">{title}</div>
-          <div
-            className="cursor-pointer p-2 w-[30%] pt-[0.9em]"
-            onClick={forwardFn}
-          >
-            <div className="mx-auto w-[1em]">
-              <IoIosArrowForward />
-            </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 border-2 border-cyan-800 rounded-b-md min-w-[200px]">
-          {!full && (
-            <MonthCalendar
-              month={month}
-              year={year}
-              weekStartDay={weekStartDay}
-              showMonthTitle={false}
-              events={eventsMap}
-            />
-          )}
-          {full &&
-            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((month) => (
-              <MonthCalendar
-                key={`month-calendar-${month}`}
-                month={month}
-                year={year}
-                weekStartDay={weekStartDay}
-                showMonthTitle={true}
-                events={eventsMap}
-              />
-            ))}
-        </div>
-      </div>
-    );
-  };
+  const monthContainerClass = view === "responsive" ? "block md:hidden" : "";
+  const yearContainerClass = view === "responsive" ? "hidden md:block" : "";
+
+  const labelsComponent = labels && (
+    <div className="my-2">
+      {Object.keys(labels || {}).map((colorCode) => (
+        <span className="mx-2 inline-block">
+          <span
+            className="inline-block w-[1em] h-[1em] rounded-full"
+            style={{ backgroundColor: colorCode }}
+          ></span>{" "}
+          {labels[colorCode]}
+        </span>
+      ))}
+    </div>
+  );
 
   return (
-    <>
-      {renderCalendar(true)}
-      {renderCalendar(false)}
-    </>
+    <div className={className}>
+      {labelsComponent}
+      {(view === "month" || view === "responsive") && (
+        <div className={monthContainerClass}>
+          <InnerYearCalendar
+            year={year}
+            month={month}
+            showFullYear={false}
+            forwardFn={monthFwd}
+            backFn={monthBack}
+            events={eventsMap}
+            weekStartDay={weekStartDay}
+            shadingFn={shadingFn}
+          />
+        </div>
+      )}
+
+      {(view === "year" || view === "responsive") && (
+        <div className={yearContainerClass}>
+          <InnerYearCalendar
+            year={year}
+            month={month}
+            showFullYear={true}
+            forwardFn={yearFwd}
+            backFn={yearBack}
+            events={eventsMap}
+            weekStartDay={weekStartDay}
+            shadingFn={shadingFn}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -223,4 +293,9 @@ type YearCalendarProps = {
   // 0 = sunday, 1 = monday, ...
   weekStartDay: number;
   events: CalendarEvent[];
+  view?: "year" | "month" | "responsive";
+  // should return color hex code with preceding #
+  shadingFn?: (dayEvents: CalendarEvent[]) => string | undefined;
+  labels?: { [colorCode: string]: string };
+  className?: string;
 };

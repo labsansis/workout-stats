@@ -73,15 +73,32 @@ export function Home() {
         ]}
       />
 
-      <YearCalendar
-        weekStartDay={1}
-        events={strengthWorkouts.map((w) => {
-          return {
-            date: w.startTime,
-            name: w.name,
-          };
-        })}
-      />
+      <WorkoutCalendar />
     </>
+  );
+}
+
+function WorkoutCalendar() {
+  const strengthWorkouts = useRecoilValue<Workout[]>(strengthWorkoutsState);
+
+  return (
+    <YearCalendar
+      weekStartDay={1}
+      events={strengthWorkouts.map((w) => {
+        return {
+          date: w.startTime,
+          name: w.name,
+        };
+      })}
+      shadingFn={(dayEvents) => {
+        if (dayEvents.length > 1) return "#D946EF";
+        if (dayEvents.length === 1) return "#BEF264";
+      }}
+      labels={{
+        "#BEF264": "One workout",
+        "#D946EF": "Multiple workouts",
+      }}
+      className="mt-5"
+    />
   );
 }
