@@ -53,7 +53,7 @@ export default function Feedback() {
   return (
     <>
       {isOpen && (
-        <div className="fixed bottom-[78px] right-[10px] w-[90%] md:w-[300px] shadow-lg shadow-slate-400 bg-white rounded-md">
+        <div className="fixed bottom-[78px] right-[10px] w-[90%] md:w-[300px] shadow-lg shadow-slate-400 bg-white rounded-md z-50">
           <div className="flex justify-between bg-slate-100 rounded-t-md">
             <div className="p-2 font-medium text-cyan-800 ">Feedback</div>
             <div
@@ -125,7 +125,7 @@ export default function Feedback() {
         </div>
       )}
       <div
-        className="fixed bottom-[20px] right-[20px] w-[3em] h-[3em] bg-cyan-800 rounded-full p-[0.55em] cursor-pointer"
+        className="fixed bottom-[20px] right-[20px] w-[3em] h-[3em] bg-cyan-800 rounded-full p-[0.55em] cursor-pointer z-50"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? (
