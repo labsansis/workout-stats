@@ -9,6 +9,7 @@ import {
   workoutsState,
 } from "../../common/recoilStateDefs";
 import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
+import YearCalendar from "../YearCalendar/YearCalendar";
 
 export function Home() {
   const strengthWorkouts = useRecoilValue<Workout[]>(strengthWorkoutsState);
@@ -71,15 +72,34 @@ export function Home() {
           },
         ]}
       />
-      <h1 className="pt-7">All activities</h1>
-      <WSTable
-        headers={["Date", "Workout Name", "Length", "# Sets"]}
-        data={byTimeDescending().map((w) => [
-          dateFormat(w.startTime, "ddd dd mmm yyyy"),
-          w.name,
-          formatDuration(w.duration),
-          (w.exerciseSets && w.exerciseSets.length) || "-",
-        ])}
+
+      <WorkoutCalendar />
+    </>
+  );
+}
+
+function WorkoutCalendar() {
+  const strengthWorkouts = useRecoilValue<Workout[]>(strengthWorkoutsState);
+
+  return (
+    <>
+      <h1 className="mt-10">Calendar</h1>
+      <YearCalendar
+        weekStartDay={1}
+        events={strengthWorkouts.map((w) => {
+          return {
+            date: w.startTime,
+            name: w.name,
+          };
+        })}
+        shadingFn={(dayEvents) => {
+          if (dayEvents.length > 1) return "#D946EF";
+          if (dayEvents.length === 1) return "#BEF264";
+        }}
+        labels={{
+          "#BEF264": "One workout",
+          "#D946EF": "Multiple workouts",
+        }}
       />
     </>
   );
