@@ -2,8 +2,9 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { monthNames } from "./data";
 import InnerMonthCalendar from "./InnerMonthCalendar";
 import { CalendarEvent } from "./models";
+import { ReactNode } from "react";
 
-export default function InnerYearCalendar({
+export default function InnerYearCalendar<T>({
   year,
   month,
   showFullYear,
@@ -12,7 +13,8 @@ export default function InnerYearCalendar({
   events,
   shadingFn,
   weekStartDay,
-}: InnerYearCalendarProps) {
+  eventsFormatFn,
+}: InnerYearCalendarProps<T>) {
   const title = showFullYear
     ? year
     : `${monthNames[month].substring(0, 3)} ${year}`;
@@ -43,6 +45,7 @@ export default function InnerYearCalendar({
             showMonthTitle={false}
             events={events}
             shadingFn={shadingFn}
+            eventsFormatFn={eventsFormatFn}
           />
         )}
         {showFullYear &&
@@ -55,6 +58,7 @@ export default function InnerYearCalendar({
               showMonthTitle={true}
               events={events}
               shadingFn={shadingFn}
+              eventsFormatFn={eventsFormatFn}
             />
           ))}
       </div>
@@ -62,14 +66,15 @@ export default function InnerYearCalendar({
   );
 }
 
-type InnerYearCalendarProps = {
+type InnerYearCalendarProps<T> = {
   showFullYear: boolean;
   year: number;
   month: number;
   forwardFn: () => void;
   backFn: () => void;
-  events: Map<string, CalendarEvent[]>;
+  events: Map<string, CalendarEvent<T>[]>;
   // 0 = sunday, 1 = monday, ...
   weekStartDay: number;
-  shadingFn?: (dayEvents: CalendarEvent[]) => string | undefined;
+  shadingFn?: (dayEvents: CalendarEvent<T>[]) => string | undefined;
+  eventsFormatFn?: (event: CalendarEvent<T>[]) => ReactNode;
 };

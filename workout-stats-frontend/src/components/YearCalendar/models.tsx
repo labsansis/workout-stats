@@ -1,5 +1,4 @@
-export type CalendarEvent = {
+export type CalendarEvent<T> = {
   date: Date;
-  name: string;
-  link?: string;
+  eventData: T;
 };

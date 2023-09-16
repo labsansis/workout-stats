@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { monthNames } from "./data";
 import { CalendarEvent } from "./models";
-import { usePopper } from "react-popper";
+import { Popup } from "reactjs-popup";
 
 const dayNames = ["Su", "M", "T", "W", "Th", "F", "Sa"];
 
-export default function InnerMonthCalendar({
+export default function InnerMonthCalendar<T>({
   month,
   year,
   weekStartDay,
   showMonthTitle,
   events,
   shadingFn,
-}: MonthCalendarProps) {
+  eventsFormatFn,
+}: MonthCalendarProps<T>) {
   const daysInMonth = (() => {
     if (month === 1) {
       const isLeap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -62,8 +63,7 @@ export default function InnerMonthCalendar({
         </div>
         <div className="grid grid-cols-7 gap-1 font-semibold text-center text-gray-800 ">
           {days.map((day, idx) => {
-  
-  const eventDayKey = `${year}-${month}-${day.dayNumber}`;
+            const eventDayKey = `${year}-${month}-${day.dayNumber}`;
             const dayEvents = events.get(eventDayKey) || [];
 
             return (
@@ -74,6 +74,7 @@ export default function InnerMonthCalendar({
                 year={year}
                 month={month}
                 dayNumber={day.dayNumber}
+                eventsFormatFn={eventsFormatFn}
               />
             );
           })}
@@ -87,46 +88,31 @@ type Day = {
   dayNumber: number;
 };
 
-type MonthCalendarProps = {
+type MonthCalendarProps<T> = {
   // 0 = sunday, 1 = monday, ...
   weekStartDay: number;
   year: number;
   month: number;
   showMonthTitle: boolean;
-  events: Map<string, CalendarEvent[]>;
-  shadingFn?: (dayEvents: CalendarEvent[]) => string | undefined;
+  events: Map<string, CalendarEvent<T>[]>;
+  shadingFn?: (dayEvents: CalendarEvent<T>[]) => string | undefined;
+  eventsFormatFn?: (event: CalendarEvent<T>[]) => ReactNode;
 };
 
-function DayComponent({
+function DayComponent<T>({
   dayNumber,
   shadingFn,
   dayEvents,
   year,
   month,
-}: DayComponentProps) {
-    const [referenceElement, setReferenceElement] = useState<HTMLParagraphElement | null>(null);
-    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
-    const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
-    const { styles, attributes } = usePopper(referenceElement, popperElement, {
-      modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
-    });    
-    const [daySummaryOpen, setDaySummaryOpen] = useState(false);
-
-    const isToday = (day: number) => {
+  eventsFormatFn,
+}: DayComponentProps<T>) {
+  const isToday = (day: number) => {
     const d = new Date();
     return (
       d.getFullYear() === year && d.getMonth() === month && d.getDate() === day
     );
   };
-
-  const handleDateClick = (e: MouseEvent)  => {
-    e.preventDefault();
-    if (!dayNumber) return;
-
-    e.preventDefault()
-
-    
-  }
 
   let circleClassName =
     "absolute w-[1.7em] h-[1.7em] left-0 right-0 top-0 bottom-0 m-auto rounded-full";
@@ -134,22 +120,45 @@ function DayComponent({
   let cirlceStyle = {};
   if (shade) cirlceStyle = { backgroundColor: shade };
   if (isToday(dayNumber)) circleClassName += " border-2 border-red-700";
+  const hasPopup = dayEvents.length > 0 && !!eventsFormatFn;
+  const dayNumberElement = (
+    <p className={`relative z-10 ${hasPopup ? "cursor-pointer" : ""}`}>
+      {dayNumber || ""}
+    </p>
+  );
   return (
     <div className="relative">
       <div className={circleClassName} style={cirlceStyle}></div>
-      <p className="relative z-10 cursor-pointer" ref={setReferenceElement}>{dayNumber || ""}</p>
-
-      <div ref={setPopperElement} style={styles.popper} {...attributes.popper} >
-        Popper element
-        <div ref={setArrowElement} style={styles.arrow} />
-      </div>    </div>
+      {hasPopup && (
+        <Popup
+          trigger={dayNumberElement}
+          position={[
+            "right center",
+            "left center",
+            "top left",
+            "top right",
+            "bottom right",
+            "bottom left",
+            "top center",
+            "bottom center",
+            "center center",
+          ]}
+        >
+          <div className="z-20 bg-white border-2 border-slate-600 rounded-lg p-2">
+            {eventsFormatFn(dayEvents)}
+          </div>
+        </Popup>
+      )}
+      {!hasPopup && dayNumberElement}
+    </div>
   );
 }
 
-type DayComponentProps = {
+type DayComponentProps<T> = {
   year: number;
   month: number;
   dayNumber: number;
-  dayEvents: CalendarEvent[];
-  shadingFn?: (dayEvents: CalendarEvent[]) => string | undefined;
+  dayEvents: CalendarEvent<T>[];
+  shadingFn?: (dayEvents: CalendarEvent<T>[]) => string | undefined;
+  eventsFormatFn?: (event: CalendarEvent<T>[]) => ReactNode;
 };

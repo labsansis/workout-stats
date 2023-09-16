@@ -89,7 +89,7 @@ function WorkoutCalendar() {
         events={strengthWorkouts.map((w) => {
           return {
             date: w.startTime,
-            name: w.name,
+            eventData: w,
           };
         })}
         shadingFn={(dayEvents) => {
@@ -99,6 +99,51 @@ function WorkoutCalendar() {
         labels={{
           "#BEF264": "One workout",
           "#D946EF": "Multiple workouts",
+        }}
+        eventsFormatFn={(events) => {
+          return (
+            <div className="w-[15em] sm:w-[20em]">
+              {events.map((e) => {
+                const w = e.eventData;
+                const exercises = [];
+                const eset = new Set();
+                const hoursMinutes = (d: Date) => {
+                  return `${d.getHours().toString().padStart(2, "0")}:${d
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, "0")}`;
+                };
+                for (let es of w.exerciseSets || []) {
+                  if (eset.has(es.exercise.displayName)) continue;
+                  eset.add(es.exercise.displayName);
+                  exercises.push(es.exercise.displayName);
+                }
+                let exerciseText = "";
+                if (exercises.length === 0) {
+                  exerciseText = "No exercises recorded";
+                } else if (exercises.length <= 2) {
+                  exerciseText = exercises.join(" and ");
+                } else {
+                  exerciseText =
+                    exercises.slice(0, 2).join(", ") +
+                    " and " +
+                    (exercises.length - 2) +
+                    " more";
+                }
+                return (
+                  <div
+                    className="text-sm inline-grid grid-cols-[min-content_1fr] gap-1 py-1 border-b last:border-b-0"
+                    key={`event-description-${e.date.toDateString()}`}
+                  >
+                    <div className="font-medium pr-3">
+                      {hoursMinutes(e.date)}
+                    </div>
+                    <div>{exerciseText}</div>
+                  </div>
+                );
+              })}
+            </div>
+          );
         }}
       />
     </>

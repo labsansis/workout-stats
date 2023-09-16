@@ -1,25 +1,26 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { CalendarEvent } from "./models";
 import InnerYearCalendar from "./InnerYearCalendar";
 
-export default function YearCalendar({
+export default function YearCalendar<T>({
   weekStartDay,
   events,
   shadingFn,
   view = "responsive",
   labels,
   className,
-}: YearCalendarProps) {
+  eventsFormatFn,
+}: YearCalendarProps<T>) {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
   const [eventsMap, setEventsMap] = useState(
-    new Map<string, CalendarEvent[]>(),
+    new Map<string, CalendarEvent<T>[]>(),
   );
 
   useEffect(() => {
-    const tmpMap = new Map<string, CalendarEvent[]>();
+    const tmpMap = new Map<string, CalendarEvent<T>[]>();
 
-    for (let event of events) {
+    for (let event of events || []) {
       const dstr = `${event.date.getFullYear()}-${event.date.getMonth()}-${event.date.getDate()}`;
       if (!tmpMap.has(dstr)) {
         tmpMap.set(dstr, []);
@@ -47,7 +48,7 @@ export default function YearCalendar({
   const labelsComponent = labels && (
     <div className="my-2">
       {Object.keys(labels || {}).map((colorCode) => (
-        <span className="mx-2 inline-block">
+        <span className="mx-2 inline-block" key={`label-${colorCode}`}>
           <span
             className="inline-block w-[1em] h-[1em] rounded-full"
             style={{ backgroundColor: colorCode }}
@@ -72,6 +73,7 @@ export default function YearCalendar({
             events={eventsMap}
             weekStartDay={weekStartDay}
             shadingFn={shadingFn}
+            eventsFormatFn={eventsFormatFn}
           />
         </div>
       )}
@@ -87,6 +89,7 @@ export default function YearCalendar({
             events={eventsMap}
             weekStartDay={weekStartDay}
             shadingFn={shadingFn}
+            eventsFormatFn={eventsFormatFn}
           />
         </div>
       )}
@@ -94,13 +97,14 @@ export default function YearCalendar({
   );
 }
 
-type YearCalendarProps = {
+type YearCalendarProps<T> = {
   // 0 = sunday, 1 = monday, ...
   weekStartDay: number;
-  events: CalendarEvent[];
+  events?: CalendarEvent<T>[];
   view?: "year" | "month" | "responsive";
   // should return color hex code with preceding #
-  shadingFn?: (dayEvents: CalendarEvent[]) => string | undefined;
+  shadingFn?: (dayEvents: CalendarEvent<T>[]) => string | undefined;
   labels?: { [colorCode: string]: string };
   className?: string;
+  eventsFormatFn?: (event: CalendarEvent<T>[]) => ReactNode;
 };
