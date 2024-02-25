@@ -1,11 +1,12 @@
 import { MouseEvent as ReactMouseEvent, useState, ReactNode } from "react";
 import { db } from "../../firebase";
-import { collection, getDocs, getDoc, doc, setDoc } from "firebase/firestore";
-import { userState } from "../../common/recoilStateDefs";
-import { useRecoilValue } from "recoil";
+import { getDoc, doc, setDoc } from "firebase/firestore";
+import { userState, userSupplementalState } from "../../common/recoilStateDefs";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { v4 as uuidv4 } from "uuid";
 import { PulseLoader } from "react-spinners";
 import { LuHelpCircle } from "react-icons/lu";
+import Select from "../formInputs/Select";
 
 function UploadKey() {
   const [uploadKey, setUploadKey] = useState("");
@@ -74,6 +75,50 @@ function UploadKey() {
   );
 }
 
+function PreferredUnits() {
+  const [userSuppl, setUserSuppl] = useRecoilState(userSupplementalState);
+  const user = useRecoilValue(userState);
+
+  const options = [
+    {
+      id: "metric",
+      value: "metric",
+      name: "Metric (kg)",
+    },
+    {
+      id: "imperial",
+      value: "imperial",
+      name: "Imperial (lbs)",
+    },
+  ];
+
+  const defaultOption = (
+    options.filter((o) => o.value === user?.preferredUnits) as any[]
+  ).concat(undefined)[0];
+  const handleChange = async ({ value }: { value: string }) => {
+    if (!user) return;
+    const newUserSuppl = {
+      ...userSuppl,
+      preferredUnits: value as "metric" | "imperial" | undefined,
+    };
+
+    await setDoc(doc(db, "users", user.id), {
+      ...userSuppl,
+      preferredUnits: value,
+    });
+    setUserSuppl(newUserSuppl);
+  };
+
+  return (
+    <Select
+      options={options}
+      onChange={handleChange}
+      defaultValue={defaultOption}
+      selectClassName="w-56"
+    />
+  );
+}
+
 function Modal(props: ModalProps) {
   if (!props.isOpen) return <></>;
 
@@ -127,7 +172,7 @@ export default function Account() {
           </div>
           <div className="">{user?.email}</div>
         </div>
-        <div className="py-3 border-b-[1px] lg:flex">
+        {/* <div className="py-3 border-b-[1px] lg:flex">
           <div className="lg:w-[250px] font-medium text-sm lg:text-base pb-3 lg-pb-0">
             Extension Upload Key{" "}
             <a href="" onClick={handleUploadKeyHelpClick}>
@@ -136,6 +181,14 @@ export default function Account() {
           </div>
           <div className="">
             <UploadKey />
+          </div>
+        </div> */}
+        <div className="py-3 border-b-[1px] lg:flex">
+          <div className="lg:w-[250px] font-medium text-sm lg:text-base pb-3 lg-pb-0">
+            Preferred units
+          </div>
+          <div className="">
+            <PreferredUnits />
           </div>
         </div>
       </div>

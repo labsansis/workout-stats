@@ -1,10 +1,14 @@
 import dateFormat from "dateformat";
 import { WSTable } from "../WSTable/WSTable";
-import { formatDuration } from "../../common/functions";
-import { useState } from "react";
+import {
+  convertWeight,
+  formatDuration,
+  formatWeightDecimals,
+} from "../../common/functions";
+import { ReactElement, useState } from "react";
 import "./StrengthWorkoutList.css";
 import { useRecoilValue } from "recoil";
-import { strengthWorkoutsState } from "../../common/recoilStateDefs";
+import { strengthWorkoutsState, userState } from "../../common/recoilStateDefs";
 import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
 import { Workout } from "../../models/workout";
 import { BiCollapseVertical, BiExpandVertical } from "react-icons/bi";
@@ -42,10 +46,18 @@ type CondensedExerciseData = {
 
 function StrengthWorkoutTable({ workout }: StrengthWorkoutTableProps) {
   const [condensed, setCondensed] = useState(true);
+  const user = useRecoilValue(userState);
 
-  const formatWeight = (weight: number | undefined): string => {
+  const weightUnit = user?.preferredUnits === "imperial" ? "lbs" : "kg";
+
+  const formatWeight = (weight: number | undefined): string | ReactElement => {
     if (!weight || weight <= 0) return "-";
-    return String(weight);
+    return (
+      <>
+        {formatWeightDecimals(convertWeight(weight, user))}{" "}
+        <span className="text-gray-400">{weightUnit}</span>
+      </>
+    );
   };
 
   const genFullView = () => {

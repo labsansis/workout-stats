@@ -1,8 +1,5 @@
 import { Workout } from "../../models/workout";
 import { CardGrid } from "../cards/CardGrid";
-import dateFormat from "dateformat";
-import { WSTable } from "../WSTable/WSTable";
-import { formatDuration } from "../../common/functions";
 import { useRecoilValue } from "recoil";
 import {
   strengthWorkoutsState,
@@ -36,14 +33,6 @@ export function Home() {
       (w) =>
         w.startTime.getTime() > new Date().getTime() - MILLISECONDS_IN_WEEK,
     ).length;
-  };
-
-  const byTimeDescending = (): Workout[] => {
-    const ws = [...workouts];
-    ws.sort((w1, w2) =>
-      w1.startTime > w2.startTime ? -1 : w1.startTime < w2.startTime ? 1 : 0,
-    );
-    return ws;
   };
 
   if (!workouts?.length) {

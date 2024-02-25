@@ -3,19 +3,28 @@ import { firebaseAuth } from "../../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate, useLocation } from "react-router-dom";
 import useFirebaseAuthentication from "../../common/hooks/useFirebaseAuthentication";
-import { userState } from "../../common/recoilStateDefs";
-import { useRecoilState } from "recoil";
+import {
+  userCoreState,
+  userState,
+  userSupplementalState,
+} from "../../common/recoilStateDefs";
+import { useRecoilState, useRecoilValue } from "recoil";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import { FcGoogle } from "react-icons/fc";
 import "./UserAuthPage.css";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import { UserSupplementalInfo } from "../../models/user";
 
 export default function UserAuthPage({ kind }: UserAuthPageProps) {
   const [ssoErrorCode, setSsoErrorCode] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const fbsUser = useFirebaseAuthentication();
-  const [user, setUser] = useRecoilState(userState);
+  const [userCore, setUserCore] = useRecoilState(userCoreState);
+  const [userSuppl, setUserSuppl] = useRecoilState(userSupplementalState);
+  const user = useRecoilValue(userState);
 
   const handleGoogleSignin = () => {
     firebaseAuth.useDeviceLanguage();
@@ -28,17 +37,30 @@ export default function UserAuthPage({ kind }: UserAuthPageProps) {
 
   useEffect(() => {
     if (!!fbsUser) {
-      setUser({
+      setUserCore({
         name: fbsUser.displayName as string,
         email: fbsUser.email as string,
         id: fbsUser.uid,
       });
+      console.log("SETTING UP FETCH");
+      fetchUserSupplementalData(fbsUser.uid);
+    }
+  }, [fbsUser]);
+
+  useEffect(() => {
+    if (!!user) {
       const redirectPath = decodeURIComponent(
         new URLSearchParams(location.search).get("redirect") || "",
       );
       navigate(redirectPath || "/home");
     }
-  }, [fbsUser]);
+  }, [user]);
+
+  const fetchUserSupplementalData = async (userId: string) => {
+    const docsnap = await getDoc(doc(db, "users", userId));
+    const usi = docsnap.data() as UserSupplementalInfo;
+    setUserSuppl(usi || {});
+  };
 
   return (
     <div className="mx-auto md:w-[30em] px-4 py-10">

@@ -1,6 +1,6 @@
 import exerciseMuscleGroups from "../../resources/exercise-muscle-groups.json";
 import { useRecoilValue } from "recoil";
-import { strengthWorkoutsState } from "../../common/recoilStateDefs";
+import { strengthWorkoutsState, userState } from "../../common/recoilStateDefs";
 import { ExerciseSet } from "../../models/workout";
 import Chart, { Props as ApexChartProps } from "react-apexcharts";
 import { useEffect, useRef, useState } from "react";
@@ -9,7 +9,10 @@ import PillSelect from "../PillSelect/PillSelect";
 import { CardGrid } from "../cards/CardGrid";
 import AnimatedNumber from "../AnimatedNumber/AnimatedNumber";
 import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
-import { saveInputChangeInHookState } from "../../common/functions";
+import {
+  convertWeight,
+  saveInputChangeInHookState,
+} from "../../common/functions";
 import Toggle from "../Toggle/Toggle";
 
 export default function TrainingVolume() {
@@ -23,6 +26,9 @@ export default function TrainingVolume() {
   const [showTargetSetsLine, setShowTargetSetsLine] = useState(false);
   const [targetSets, setTargetSets] = useState(10);
   const chartParentRef = useRef<HTMLHeadingElement>(null);
+  const user = useRecoilValue(userState);
+
+  const weightUnit = user?.preferredUnits === "imperial" ? "lbs" : "kg";
 
   useEffect(() => {
     setChartHeight(
@@ -113,6 +119,7 @@ export default function TrainingVolume() {
       return Math.round(
         ess
           .map((es) => (es.weight || 0) * es.repetitionCount)
+          .map((weight) => convertWeight(weight, user))
           .reduce((a, b) => a + b),
       );
     return ess.length;
@@ -154,7 +161,8 @@ export default function TrainingVolume() {
   const volumePerMuscle = extractVolumePerMuscle(groupSetsByPrimaryMuscle());
   const keys =
     groupingLevel === "coarse" ? coarseMuscleGroups : granuralMuscleGroups;
-  const yAxisTitle = volumeType === "weight" ? "Total Weight" : "# Sets";
+  const yAxisTitle =
+    volumeType === "weight" ? `Total Weight (${weightUnit})` : "# Sets";
   const prepChartProps = (): ApexChartProps => {
     return {
       type: "bar",
@@ -231,7 +239,10 @@ export default function TrainingVolume() {
       <CardGrid
         cards={[
           {
-            label: volumeType === "weight" ? "Total Weight" : "Total Sets",
+            label:
+              volumeType === "weight"
+                ? `Total Weight (${weightUnit})`
+                : "Total Sets",
             value: <AnimatedNumber value={calculateTotalVolume()} />,
           },
         ]}

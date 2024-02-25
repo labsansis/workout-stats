@@ -54,7 +54,8 @@ export default function WorkoutDataFetch() {
           es.repetitionCount = ges.repetitionCount;
           //   Garmin seems to store it in grams
           es.weight = (ges.weight || 0) / 1000;
-          // For now just default to kg.
+          // Garmin seems to always store the weight in grams so we'll
+          // just stick to metric under the hood.
           es.weightUnit = WeightUnit.KG;
           es.startTime = new Date(Date.parse(ges.startTime));
           es.duration = ges.duration;
