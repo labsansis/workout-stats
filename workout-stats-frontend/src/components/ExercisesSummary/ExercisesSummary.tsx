@@ -4,14 +4,18 @@ import { WSTable } from "../WSTable/WSTable";
 import dateFormat from "dateformat";
 import Chart, { Props as ApexChartProps } from "react-apexcharts";
 import { useRecoilValue } from "recoil";
-import { strengthWorkoutsState } from "../../common/recoilStateDefs";
+import { strengthWorkoutsState, userState } from "../../common/recoilStateDefs";
 import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
 import { sortBy } from "lodash";
+import { convertWeight } from "../../common/functions";
 
 export function ExercisesSummary() {
   const [exerciseToPlot, setExerciseToPlot] = useState("");
   const plotRef = useRef<HTMLDivElement>(null);
   const workouts = useRecoilValue(strengthWorkoutsState);
+  const user = useRecoilValue(userState);
+
+  const weightUnit = user?.preferredUnits === "imperial" ? "lbs" : "kg";
 
   const handlePlotButtonClick = (key: string) => {
     setExerciseToPlot(key);
@@ -48,7 +52,8 @@ export function ExercisesSummary() {
     if (weight > 0) {
       return (
         <>
-          {weight} <span className="text-gray-400">kg</span>
+          {convertWeight(weight, user)}{" "}
+          <span className="text-gray-400">{weightUnit}</span>
         </>
       );
     }
@@ -97,7 +102,7 @@ export function ExercisesSummary() {
     dayDatePR.sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0));
     // what we called "day" before interally now becomes "date" for external use
     const dates = dayDatePR.map((ddw) => ddw.day);
-    const weights = dayDatePR.map((ddw) => ddw.weight);
+    const weights = dayDatePR.map((ddw) => convertWeight(ddw.weight, user));
     const reps = dayDatePR.map((ddw) => ddw.reps);
     const metricKey = Math.max(...weights) > 0 ? "kg" : "reps";
     const prs = Math.max(...weights) > 0 ? weights : reps;
@@ -114,7 +119,7 @@ export function ExercisesSummary() {
    */
   const extractExerciseVolumeSeries = (
     exerciseKey: string,
-  ): { dates: string[]; volumes: number[]; metricKey: string } => {
+  ): { dates: string[]; volumes: number[]; metricKey: "kg" | "reps" } => {
     const volByDay: {
       [day: string]: { volume: number; reps: number; date: Date };
     } = {};
@@ -140,7 +145,7 @@ export function ExercisesSummary() {
     dayDateVol.sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0));
     // what we called "day" before interally now becomes "date" for external use
     const dates = dayDateVol.map((ddw) => ddw.day);
-    const volumes = dayDateVol.map((ddw) => ddw.volume);
+    const volumes = dayDateVol.map((ddw) => convertWeight(ddw.volume, user));
     const reps = dayDateVol.map((ddw) => ddw.reps);
     const metricKey = Math.max(...volumes) > 0 ? "kg" : "reps";
     const rvs = metricKey == "kg" ? volumes : reps;
@@ -174,13 +179,19 @@ export function ExercisesSummary() {
         yaxis: [
           {
             title: {
-              text: metricKey === "kg" ? "Weight (kg)" : "Reps (for max)",
+              text:
+                metricKey === "kg"
+                  ? `Weight (${weightUnit})`
+                  : "Reps (for max)",
             },
           },
           {
             opposite: true,
             title: {
-              text: metricKey === "kg" ? "Volume (kg)" : "Reps (for total)",
+              text:
+                metricKey === "kg"
+                  ? `Volume (${weightUnit})`
+                  : "Reps (for total)",
             },
           },
         ],

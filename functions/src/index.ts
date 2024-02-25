@@ -8,16 +8,13 @@ import {setGlobalOptions} from "firebase-functions/v2";
 import * as express from "express";
 
 import {initializeApp} from "firebase-admin/app";
-import {credential as fbsCredential} from "firebase-admin";
+// import {credential as fbsCredential} from "firebase-admin";
 import {getFirestore} from "firebase-admin/firestore";
 import {GarminActivity} from "./models/garmin";
-import * as serviceAccount from "./serviceAccount.json";
 
 setGlobalOptions({maxInstances: 10});
 
-initializeApp({
-  credential: fbsCredential.cert(serviceAccount),
-});
+initializeApp();
 
 const fadb = getFirestore();
 

@@ -1,3 +1,5 @@
+import { User } from "../models/user";
+
 export const formatDuration = (duration: number): string => {
   let h = Math.floor(duration / 3600);
   let m = Math.floor((duration % 3600) / 60);
@@ -19,4 +21,14 @@ export function saveInputChangeInHookState(setStateFn: CallableFunction) {
         : target.value;
     setStateFn(value);
   };
+}
+
+export function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
+
+export function convertWeight(weightInKg: number, user: User | null) {
+  if (user?.preferredUnits === "imperial")
+    return Math.round(weightInKg * 2.20462262);
+  return weightInKg;
 }

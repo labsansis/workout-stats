@@ -2,7 +2,12 @@ import "./App.css";
 import { WeightUnit, Workout } from "./models/workout";
 import demoDataJson from "./demoData.json";
 import { useRecoilState } from "recoil";
-import { workoutsState, userState } from "./common/recoilStateDefs";
+import {
+  workoutsState,
+  userState,
+  userCoreState,
+  userSupplementalState,
+} from "./common/recoilStateDefs";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,7 +15,8 @@ import { MdOutlineAutoGraph } from "react-icons/md";
 
 function App() {
   const [workouts, setWorkouts] = useRecoilState<Workout[]>(workoutsState);
-  const [user, setUser] = useRecoilState(userState);
+  const [userCore, setUserCore] = useRecoilState(userCoreState);
+  const [userSuppl, setUserSuppl] = useRecoilState(userSupplementalState);
   const navigate = useNavigate();
 
   const setDemoData = () => {
@@ -35,7 +41,8 @@ function App() {
 
   const handleDemoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setUser({ name: "Demo User", email: "demo@demo.com", id: "demo" });
+    setUserCore({ name: "Demo User", email: "demo@demo.com", id: "demo" });
+    setUserSuppl({ preferredUnits: "metric" });
     setDemoData();
     navigate("/home");
   };

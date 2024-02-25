@@ -1,0 +1,23 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{userId} {
+      allow read, create, update: if userId == request.auth.uid
+    }
+
+    match /users/{userId}/rawWorkouts/{rawWorkoutId} {
+      allow read: if userId == request.auth.uid
+      allow create, update: if userId == request.auth.uid &&
+      			rawWorkoutId.matches('garmin.*')
+    }
+
+    match /userSensitiveData/{userId} {
+      allow read: if userId == request.auth.uid
+      allow create, update: if userId == request.auth.uid &&
+      			request.resource.data.extensionUploadToken is string &&
+            request.resource.data.extensionUploadToken.size() == 32
+    }
+  }
+}
