@@ -1,6 +1,6 @@
 import { MouseEvent as ReactMouseEvent, useState, ReactNode } from "react";
 import { db } from "../../firebase";
-import { collection, getDocs, getDoc, doc, setDoc } from "firebase/firestore";
+import { getDoc, doc, setDoc } from "firebase/firestore";
 import { userState, userSupplementalState } from "../../common/recoilStateDefs";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { v4 as uuidv4 } from "uuid";
@@ -114,6 +114,7 @@ function PreferredUnits() {
       options={options}
       onChange={handleChange}
       defaultValue={defaultOption}
+      selectClassName="w-56"
     />
   );
 }
