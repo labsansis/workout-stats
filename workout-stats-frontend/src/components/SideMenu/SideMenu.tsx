@@ -76,9 +76,11 @@ const SideMenu = () => {
           Training Volume
         </MenuLink>
         <div className="menu-user-line">{getUserDisplayName()}</div>
-        <MenuLink to="/account" icon={RiAccountCircleLine}>
-          Account
-        </MenuLink>
+        {user?.email !== "demo@demo.com" && (
+          <MenuLink to="/account" icon={RiAccountCircleLine}>
+            Account
+          </MenuLink>
+        )}
         <MenuLink to="/upload" icon={GoUpload}>
           Upload files
         </MenuLink>
