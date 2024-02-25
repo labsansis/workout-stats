@@ -1,6 +1,10 @@
 import dateFormat from "dateformat";
 import { WSTable } from "../WSTable/WSTable";
-import { convertWeight, formatDuration } from "../../common/functions";
+import {
+  convertWeight,
+  formatDuration,
+  formatWeightDecimals,
+} from "../../common/functions";
 import { ReactElement, useState } from "react";
 import "./StrengthWorkoutList.css";
 import { useRecoilValue } from "recoil";
@@ -50,7 +54,7 @@ function StrengthWorkoutTable({ workout }: StrengthWorkoutTableProps) {
     if (!weight || weight <= 0) return "-";
     return (
       <>
-        {convertWeight(weight, user)}{" "}
+        {formatWeightDecimals(convertWeight(weight, user))}{" "}
         <span className="text-gray-400">{weightUnit}</span>
       </>
     );

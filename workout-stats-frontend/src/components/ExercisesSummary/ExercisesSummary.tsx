@@ -7,7 +7,7 @@ import { useRecoilValue } from "recoil";
 import { strengthWorkoutsState, userState } from "../../common/recoilStateDefs";
 import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
 import { sortBy } from "lodash";
-import { convertWeight } from "../../common/functions";
+import { convertWeight, formatWeightDecimals } from "../../common/functions";
 
 export function ExercisesSummary() {
   const [exerciseToPlot, setExerciseToPlot] = useState("");
@@ -52,7 +52,7 @@ export function ExercisesSummary() {
     if (weight > 0) {
       return (
         <>
-          {convertWeight(weight, user)}{" "}
+          {formatWeightDecimals(convertWeight(weight, user))}{" "}
           <span className="text-gray-400">{weightUnit}</span>
         </>
       );
