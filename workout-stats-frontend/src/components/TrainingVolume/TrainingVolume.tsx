@@ -12,8 +12,51 @@ import WorkoutDataFetch from "../WorkoutDataFetch/WorkoutDataFetch";
 import {
   convertWeight,
   saveInputChangeInHookState,
+  formatWeightDecimals,
 } from "../../common/functions";
 import Toggle from "../Toggle/Toggle";
+
+function MuscleGroupBreakdown(props: MuscleGroupBreakdownProps) {
+  const volumeByExercise: { [key: string]: number } = {};
+  const user = useRecoilValue(userState);
+  const weightUnit = user?.preferredUnits === "imperial" ? "lbs" : "kg";
+  for (let es of props.exerciseSets) {
+    if (!(es.exercise.displayName in volumeByExercise)) {
+      volumeByExercise[es.exercise.displayName] = 0;
+    }
+    volumeByExercise[es.exercise.displayName] +=
+      props.volumeType === "weight"
+        ? (es.weight || 0) * (es.repetitionCount || 0)
+        : 1;
+  }
+
+  const volumeNumberString = (v: number) =>
+    props.volumeType === "sets"
+      ? v
+      : formatWeightDecimals(convertWeight(v, user));
+  const unit = props.volumeType === "sets" ? "sets" : weightUnit;
+
+  return (
+    <>
+      <div className="mt-3 font-semibold">
+        Breakdown of {props.muscleGroupTitle}
+      </div>
+      <div>
+        {Object.keys(volumeByExercise).map((key) => (
+          <div key={key} className="mt-2 text-sm">
+            {key}: {volumeNumberString(volumeByExercise[key])} {unit}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+type MuscleGroupBreakdownProps = {
+  exerciseSets: ExerciseSet[];
+  muscleGroupTitle: string;
+  volumeType: "sets" | "weight";
+};
 
 export default function TrainingVolume() {
   const workouts = useRecoilValue(strengthWorkoutsState);
@@ -21,10 +64,13 @@ export default function TrainingVolume() {
     new Date(new Date().getTime() - 7 * 24 * 3600 * 1000),
   );
   const [groupingLevel, setGroupingLevel] = useState("coarse");
-  const [volumeType, setVolumeType] = useState("sets");
+  const [volumeType, setVolumeType] = useState<"sets" | "weight">("sets");
   const [chartHeight, setChartHeight] = useState("auto");
   const [showTargetSetsLine, setShowTargetSetsLine] = useState(false);
   const [targetSets, setTargetSets] = useState(10);
+  const [breakdownMuscleGroup, setBreakdownMuscleGroup] = useState<
+    string | undefined
+  >();
   const chartParentRef = useRef<HTMLHeadingElement>(null);
   const user = useRecoilValue(userState);
 
@@ -65,6 +111,9 @@ export default function TrainingVolume() {
     Array.from(new Set(Object.values(muscleGroupsCoarseMapping))),
   );
 
+  const muscleGroups =
+    groupingLevel === "coarse" ? coarseMuscleGroups : granuralMuscleGroups;
+
   const calculateTotalVolume = () => {
     return sum(
       workouts
@@ -102,9 +151,9 @@ export default function TrainingVolume() {
         continue;
       }
       for (let es of workout.exerciseSets || []) {
-        const pms =
-          getMuscleGroups(es.exercise.name).primaryMuscles ||
-          getMuscleGroups(es.exercise.category).primaryMuscles;
+        const pms = getMuscleGroups(
+          es.exercise.name || es.exercise.category,
+        ).primaryMuscles;
         const pms_set = new Set(pms.map(muscleMapFn));
         for (let muscle of Array.from(pms_set)) {
           res.set(muscle, [...(res.get(muscle) || []), es]);
@@ -158,9 +207,8 @@ export default function TrainingVolume() {
       },
     };
   };
-  const volumePerMuscle = extractVolumePerMuscle(groupSetsByPrimaryMuscle());
-  const keys =
-    groupingLevel === "coarse" ? coarseMuscleGroups : granuralMuscleGroups;
+  const setsByMuscle = groupSetsByPrimaryMuscle();
+  const volumePerMuscle = extractVolumePerMuscle(setsByMuscle);
   const yAxisTitle =
     volumeType === "weight" ? `Total Weight (${weightUnit})` : "# Sets";
   const prepChartProps = (): ApexChartProps => {
@@ -169,7 +217,7 @@ export default function TrainingVolume() {
       series: [
         {
           name: yAxisTitle,
-          data: keys.map((k) => {
+          data: muscleGroups.map((k) => {
             return { x: k, y: volumePerMuscle.get(k) || 0 };
           }),
         },
@@ -186,6 +234,17 @@ export default function TrainingVolume() {
         },
         annotations: {
           yaxis: [genTargetSetsAnnotation()],
+        },
+        chart: {
+          events: {
+            dataPointSelection: (
+              event: any,
+              chartContext: any,
+              config: any,
+            ) => {
+              setBreakdownMuscleGroup(muscleGroups[config.dataPointIndex]);
+            },
+          },
         },
       },
       height: chartHeight,
@@ -262,9 +321,19 @@ export default function TrainingVolume() {
         />
         sets per muscle group per week.
       </div>
-      <div className="mt-10 w-full xl:w-3/5" ref={chartParentRef}>
+      <div className="px-2 mt-10 text-xs text-slate-800">
+        Select a muscle group on the chart to see an exercise breakdown.
+      </div>
+      <div className="mt-2 w-full xl:w-3/5" ref={chartParentRef}>
         <Chart {...prepChartProps()} />
       </div>
+      {breakdownMuscleGroup && (
+        <MuscleGroupBreakdown
+          muscleGroupTitle={breakdownMuscleGroup}
+          exerciseSets={setsByMuscle.get(breakdownMuscleGroup) || []}
+          volumeType={volumeType}
+        />
+      )}
     </>
   );
 }
