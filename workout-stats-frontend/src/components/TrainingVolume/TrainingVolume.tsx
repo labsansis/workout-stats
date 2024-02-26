@@ -185,21 +185,6 @@ export default function TrainingVolume() {
     return res;
   };
 
-  const extractExeriseDisplayNamesPerMuscle = (
-    groupedExercises: Map<string, ExerciseSet[]>,
-  ) => {
-    const res = new Map<string, Set<string>>();
-
-    for (let [muscle, ess] of Array.from(groupedExercises)) {
-      const exercises = new Set<string>();
-      for (let es of ess) {
-        exercises.add(es.exercise.displayName);
-      }
-      res.set(muscle, exercises);
-    }
-    return res;
-  };
-
   const genTargetSetsAnnotation = () => {
     if (!showTargetSetsLine || volumeType != "sets") return {};
     const earliestTimestamp =
