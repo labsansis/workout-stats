@@ -258,8 +258,6 @@ export default function TrainingVolume() {
               config: any,
             ) => {
               setBreakdownMuscleGroup(muscleGroups[config.dataPointIndex]);
-              // console.log(chartContext, config);
-              // console.log(muscleGroups[config.dataPointIndex])
             },
           },
         },
