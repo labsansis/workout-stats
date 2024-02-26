@@ -322,7 +322,8 @@ export default function TrainingVolume() {
         sets per muscle group per week.
       </div>
       <div className="px-2 mt-10 text-xs text-slate-800">
-        Select a muscle group on the chart to see an exercise breakdown.
+        Select a muscle group on the chart to see an exercise breakdown under
+        the chart.
       </div>
       <div className="mt-2 w-full xl:w-3/5" ref={chartParentRef}>
         <Chart {...prepChartProps()} />
