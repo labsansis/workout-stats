@@ -28,10 +28,11 @@ export function ExercisesSummary() {
   for (let w of workouts) {
     if (!w.exerciseSets) continue;
     for (let es of w.exerciseSets) {
-      if (!(es.exercise.name in setsByExercise)) {
-        setsByExercise[es.exercise.name] = [];
+      const key = es.exercise.name || es.exercise.category;
+      if (!(key in setsByExercise)) {
+        setsByExercise[key] = [];
       }
-      setsByExercise[es.exercise.name].push({
+      setsByExercise[key].push({
         ...es,
         workoutStartTime: w.startTime,
       });
