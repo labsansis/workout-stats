@@ -324,7 +324,6 @@ export default function TrainingVolume() {
         </div>
         <div className={advancedMenuOpen ? "" : "hidden"}>
           <div className="mt-2">
-            {" "}
             <Toggle
               handleChange={setShowTargetSetsLine}
               default={false}
@@ -347,7 +346,7 @@ export default function TrainingVolume() {
             />
           </div>
         </div>
-      </div>{" "}
+      </div>
       <div className="px-2 mt-10 text-xs text-slate-800">
         Select a muscle group on the chart to see an exercise breakdown under
         the chart.
