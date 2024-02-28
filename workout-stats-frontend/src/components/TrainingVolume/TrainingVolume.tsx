@@ -27,7 +27,9 @@ function MuscleGroupBreakdown(props: MuscleGroupBreakdownProps) {
     volumeByExercise[es.exercise.displayName] +=
       props.volumeType === "weight"
         ? (es.weight || 0) * (es.repetitionCount || 0)
-        : 1;
+        : props.countZeroRepSets || es.repetitionCount > 0
+        ? 1
+        : 0;
   }
 
   const volumeNumberString = (v: number) =>
@@ -56,6 +58,7 @@ type MuscleGroupBreakdownProps = {
   exerciseSets: ExerciseSet[];
   muscleGroupTitle: string;
   volumeType: "sets" | "weight";
+  countZeroRepSets: boolean;
 };
 
 export default function TrainingVolume() {
@@ -71,6 +74,8 @@ export default function TrainingVolume() {
   const [breakdownMuscleGroup, setBreakdownMuscleGroup] = useState<
     string | undefined
   >();
+  const [countZeroRepSets, setCountZeroRepSets] = useState(false);
+  const [advancedMenuOpen, setAdvancedMenuOpen] = useState(false);
   const chartParentRef = useRef<HTMLHeadingElement>(null);
   const user = useRecoilValue(userState);
 
@@ -171,7 +176,8 @@ export default function TrainingVolume() {
           .map((weight) => convertWeight(weight, user))
           .reduce((a, b) => a + b),
       );
-    return ess.length;
+    return ess.filter((es) => countZeroRepSets || es.repetitionCount > 0)
+      .length;
   };
 
   const extractVolumePerMuscle = (
@@ -294,7 +300,6 @@ export default function TrainingVolume() {
           defaultValue={"sets"}
         />
       </div>
-
       <CardGrid
         cards={[
           {
@@ -306,20 +311,41 @@ export default function TrainingVolume() {
           },
         ]}
       />
-      <div className="inline-block p-4 my-4 rounded-xl border-[1px] border-slate-300">
-        <Toggle
-          handleChange={setShowTargetSetsLine}
-          default={false}
-          label="Show target sets at"
-        />
-        <input
-          type="number"
-          size={3}
-          value={targetSets}
-          onChange={saveInputChangeInHookState(setTargetSets)}
-          className="mx-2 px-1 border-b-2 border-b-cyan-800"
-        />
-        sets per muscle group per week.
+      {/* Advanced options */}
+      <div className="p-4 my-4 rounded-xl border-[1px] border-slate-300">
+        <div
+          className="text-sm cursor-pointer"
+          onClick={() => {
+            console.log("yo");
+            setAdvancedMenuOpen(!advancedMenuOpen);
+          }}
+        >
+          {advancedMenuOpen ? "▼" : "▶"} Advanced options
+        </div>
+        <div className={advancedMenuOpen ? "" : "hidden"}>
+          <div className="mt-2">
+            <Toggle
+              handleChange={setShowTargetSetsLine}
+              default={false}
+              label="Show target sets at"
+            />
+            <input
+              type="number"
+              size={3}
+              value={targetSets}
+              onChange={saveInputChangeInHookState(setTargetSets)}
+              className="mx-2 px-1 border-b-2 border-b-cyan-800"
+            />
+            sets per muscle group per week.
+          </div>
+          <div className="mt-2">
+            <Toggle
+              handleChange={setCountZeroRepSets}
+              default={false}
+              label="Count sets with zero reps towards training volume"
+            />
+          </div>
+        </div>
       </div>
       <div className="px-2 mt-10 text-xs text-slate-800">
         Select a muscle group on the chart to see an exercise breakdown under
@@ -333,6 +359,7 @@ export default function TrainingVolume() {
           muscleGroupTitle={breakdownMuscleGroup}
           exerciseSets={setsByMuscle.get(breakdownMuscleGroup) || []}
           volumeType={volumeType}
+          countZeroRepSets={countZeroRepSets}
         />
       )}
     </>
