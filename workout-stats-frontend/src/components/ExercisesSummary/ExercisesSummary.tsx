@@ -67,7 +67,7 @@ export function ExercisesSummary() {
 
   const getLatestDate = (key: string): Date => {
     return setsByExercise[key]
-      .map((es) => es.startTime)
+      .map((es) => es.workoutStartTime)
       .reduce((d1, d2) => (d1 > d2 ? d1 : d2));
   };
 
