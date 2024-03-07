@@ -18,6 +18,31 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "hosting": [
+    {
+      "target": "workoutstats-b571c",
+      "public": "workout-stats-frontend/build",
+      "ignore": [
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/api/**",
+          "function": "api",
+          "region": "us-central1",
+          "pinTag": true
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "predeploy": [
+        "npm --prefix \"workout-stats-frontend\" run build"
+      ]
+  }
+  ],
   "emulators": {
     "auth": {
       "port": 9099
