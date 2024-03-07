@@ -64,7 +64,7 @@ app.post("/rawWorkout/garmin", async (req, res) => {
   res.send({status: "ok"});
 });
 
-exports.app = onRequest({cors: true}, app);
+exports.api = onRequest({cors: true}, app);
 
 type GarminUploadRequestBody = {
   activities: GarminActivity[];

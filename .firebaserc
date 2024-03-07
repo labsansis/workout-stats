@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "workoutstats-b571c"
-  }
+  },
+  "targets": {
+    "workoutstats-b571c": {
+      "hosting": {
+        "workoutstats-b571c": [
+          "workoutstats-b571c"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
